@@ -10,10 +10,6 @@
 <div class="home-hero home-hero--enhanced">
   <p class="hero-kicker">Epigenome-Wide Association Study in R</p>
   <p class="hero-lead">easyEWAS is an R package for conducting EWAS in a unified and reproducible way. It supports Illumina methylation array platforms including 27K, 450K, EPIC v1, EPIC v2, and MSA, and provides an end-to-end workflow for modeling, batch correction, visualization, validation, enrichment, and optional DMR analysis.</p>
-  <div class="hero-actions">
-    <a class="hero-btn hero-btn-primary" href="articles/quickstart.html">Quickstart</a>
-    <a class="hero-btn hero-btn-ghost" href="articles/full-pipeline.html">View Tutorial</a>
-  </div>
 </div>
 
 <div align="center" style="margin-top: 20px;">
