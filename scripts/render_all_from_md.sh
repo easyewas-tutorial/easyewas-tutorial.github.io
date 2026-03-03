@@ -65,10 +65,16 @@ while IFS= read -r md_rel; do
 
   body_raw="$TMP_DIR/body_raw.html"
   body_path="$TMP_DIR/body.html"
+  h1_path="$TMP_DIR/h1.html"
   prefix_path="$TMP_DIR/prefix.html"
   suffix_path="$TMP_DIR/suffix.html"
 
   pandoc "$md_path" -f gfm -t html5 > "$body_raw"
+
+  # Capture first H1 from markdown HTML for page-header replacement.
+  perl -0777 -ne '
+    if (m#<h1[^>]*>.*?</h1>#s) { print $&; }
+  ' "$body_raw" > "$h1_path"
 
   # Keep pkgdown's page header and strip duplicate top-level title from markdown.
   perl -0777 -pe 's/^\s*<h1[^>]*>.*?<\/h1>\s*//s' "$body_raw" > "$body_path"
@@ -87,6 +93,11 @@ while IFS= read -r md_rel; do
     skipped=$((skipped + 1))
     continue
   }
+
+  # Replace shell page title with markdown H1 when available.
+  if [[ -s "$h1_path" ]]; then
+    H1_HTML="$(cat "$h1_path")" perl -0777 -i -pe 's#(<div class="page-header">).*?(</div>)#$1$ENV{H1_HTML}$2#s' "$prefix_path"
+  fi
 
   perl -0777 -ne '
     if (m#(<\/main>.*)\z#s) {
