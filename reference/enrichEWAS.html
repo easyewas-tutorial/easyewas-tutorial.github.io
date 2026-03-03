@@ -35,142 +35,110 @@
       <h1>Enrichment analyses</h1>
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/R/enrichEWAS.R" class="external-link"><code>R/enrichEWAS.R</code></a></small>
       <div class="d-none name"><code>enrichEWAS.Rd</code></div>
-    </div>
-
-    <div class="ref-description section level2">
-    <p>Perform GO or KEGG enrichment analysis based on the <span class="pkg">clusterProfiler</span> package.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">enrichEWAS</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"default"</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"GO"</span>,</span>
-<span>  filterP <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  cutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
-<span>  pool <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  plotType <span class="op">=</span> <span class="st">"dot"</span>,</span>
-<span>  plotcolor <span class="op">=</span> <span class="st">"p.adjust"</span>,</span>
-<span>  x <span class="op">=</span> <span class="st">"GeneRatio"</span>,</span>
-<span>  showCategory <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  width <span class="op">=</span> <span class="fl">11</span>,</span>
-<span>  height <span class="op">=</span> <span class="fl">7</span>,</span>
-<span>  pvalueCutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
-<span>  qvalueCutoff <span class="op">=</span> <span class="fl">0.2</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-    </div>
-
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>An R6 class integrated with all the information obtained from the startEWAS or plotEWAS
-or bootEWAS function.</p></dd>
-
-
-<dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>User-customized .xlsx file name for storing EWAS results. If
-"default" is chosen, it will be named as "enrichresult".</p></dd>
-
-
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Methods of enrichment analysis, including "GO" and "KEGG".</p></dd>
-
-
-<dt id="arg-filterp">filterP<a class="anchor" aria-label="anchor" href="#arg-filterp"></a></dt>
-<dd><p>The name of the p value columns such as "PVAL", "FDR", and "Bonfferoni." Users use
-this P-value to screen for significance sites and further conduct enrichment analysis.</p></dd>
-
-
-<dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
-<dd><p>The cutoff value of the P-value used to filter for further enrichment analysis.
-The default is 0.05.</p></dd>
-
-
-<dt id="arg-ont">ont<a class="anchor" aria-label="anchor" href="#arg-ont"></a></dt>
-<dd><p>When choosing GO enrichment analysis, select the GO sub-ontology for which the enrichment analysis
-will be performed. One of "BP", "MF", and "CC" sub-ontologies, or "ALL" for all three. Default to "BP".</p></dd>
-
-
-<dt id="arg-pool">pool<a class="anchor" aria-label="anchor" href="#arg-pool"></a></dt>
-<dd><p>If ont='ALL', whether pool three GO sub-ontologies.</p></dd>
-
-
-<dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
-<dd><p>Whether the results of enrichment analysis need to be visualized, the default is TRUE</p></dd>
-
-
-<dt id="arg-plottype">plotType<a class="anchor" aria-label="anchor" href="#arg-plottype"></a></dt>
-<dd><p>Whether to draw a bar plot ("bar") or a dot plot ("dot"), the default is "dot".</p></dd>
-
-
-<dt id="arg-plotcolor">plotcolor<a class="anchor" aria-label="anchor" href="#arg-plotcolor"></a></dt>
-<dd><p>It is the vertical axis of the picture of the enrichment analysis results. Users can choose
-"pvalue" or "p.adjust" or "qvalue". The default is "p.adjust".</p></dd>
-
-
-<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Character string specifying the variable to be used on the x-axis of the plot.
-Common options are "GeneRatio" or "Count".</p><ul><li><p>"GeneRatio": ratio of input genes annotated to a given term.</p></li>
-<li><p>"Count": the number of input genes annotated to the term.</p></li>
-</ul></dd>
-
-
-<dt id="arg-showcategory">showCategory<a class="anchor" aria-label="anchor" href="#arg-showcategory"></a></dt>
-<dd><p>The number of categories which will be displayed in the plots. Default to 10.</p></dd>
-
-
-<dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
-<dd><p>Width of the PDF output in inches. Default is 11.</p></dd>
-
-
-<dt id="arg-height">height<a class="anchor" aria-label="anchor" href="#arg-height"></a></dt>
-<dd><p>Height of the PDF output in inches. Default is 7.</p></dd>
-
-
-<dt id="arg-pvaluecutoff">pvalueCutoff<a class="anchor" aria-label="anchor" href="#arg-pvaluecutoff"></a></dt>
-<dd><p>The p-value threshold used to filter enrichment results. Only results that pass
-the p-value test (i.e., those smaller than this value) will be reported. This value refers to the
-p-value before adjustment. The p-value represents the probability of observing the current level of enrichment
-under the assumption of no enrichment. The smaller the p-value, the more significant the enrichment result.</p></dd>
-
-
-<dt id="arg-padjustmethod">pAdjustMethod<a class="anchor" aria-label="anchor" href="#arg-padjustmethod"></a></dt>
-<dd><p>The p-value adjustment method used for multiple hypothesis testing, aimed at reducing false
-positives caused by multiple comparisons. One of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none".</p></dd>
-
-
-<dt id="arg-qvaluecutoff">qvalueCutoff<a class="anchor" aria-label="anchor" href="#arg-qvaluecutoff"></a></dt>
-<dd><p>qvalue cutoff on enrichment tests to report as significant. The q-value is the result
-of controlling the false discovery rate (FDR) and represents the proportion of false positives that
-may occur when conducting multiple tests.Tests must pass i) pvalueCutoff on unadjusted pvalues, ii) pvalueCutoff
-on adjusted pvalues and iii) qvalueCutoff on qvalues to be reported. The default is 0.2.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>input, An R6 class object integrating all information.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadEWAS.html">loadEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, ExpoData <span class="op">=</span> <span class="st">"default"</span>, MethyData <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="transEWAS.html">transEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, Vars <span class="op">=</span> <span class="st">"cov1"</span>, TypeTo <span class="op">=</span> <span class="st">"factor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="startEWAS.html">startEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, chipType <span class="op">=</span> <span class="st">"EPICV2"</span>, model <span class="op">=</span> <span class="st">"lm"</span>, expo <span class="op">=</span> <span class="st">"default"</span>, adjustP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="plotEWAS.html">plotEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, pval <span class="op">=</span> <span class="st">"PVAL"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="bootEWAS.html">bootEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, filterP <span class="op">=</span> <span class="st">"PVAL"</span>, cutoff <span class="op">=</span> <span class="fl">0.05</span>, times <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">enrichEWAS</span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, method <span class="op">=</span> <span class="st">"GO"</span>, filterP <span class="op">=</span> <span class="st">"PVAL"</span>, cutoff <span class="op">=</span> <span class="fl">0.05</span>, pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-</code></pre></div>
-    </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    <p>Perform GO or KEGG enrichment analysis based on the clusterProfiler
+package.</p>
+<h2 id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">enrichEWAS</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  input,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;GO&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">filterP =</span> <span class="st">&quot;PVAL&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="fl">0.05</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ont =</span> <span class="st">&quot;BP&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pool =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">plotType =</span> <span class="st">&quot;dot&quot;</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">plotcolor =</span> <span class="st">&quot;p.adjust&quot;</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="st">&quot;GeneRatio&quot;</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">showCategory =</span> <span class="dv">10</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">11</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">7</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">pvalueCutoff =</span> <span class="fl">0.05</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">pAdjustMethod =</span> <span class="st">&quot;BH&quot;</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">qvalueCutoff =</span> <span class="fl">0.2</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="arguments">Arguments</h2>
+<ul>
+<li><p>input:</p>
+<p>An R6 class integrated with all the information obtained from the
+startEWAS or plotEWAS or bootEWAS function.</p></li>
+<li><p>filename:</p>
+<p>User-customized .xlsx file name for storing EWAS results. If
+"default" is chosen, it will be named as "enrichresult".</p></li>
+<li><p>method:</p>
+<p>Methods of enrichment analysis, including "GO" and "KEGG".</p></li>
+<li><p>filterP:</p>
+<p>The name of the p value columns such as "PVAL", "FDR", and
+"Bonfferoni." Users use this P-value to screen for significance sites
+and further conduct enrichment analysis.</p></li>
+<li><p>cutoff:</p>
+<p>The cutoff value of the P-value used to filter for further enrichment
+analysis. The default is 0.05.</p></li>
+<li><p>ont:</p>
+<p>When choosing GO enrichment analysis, select the GO sub-ontology for
+which the enrichment analysis will be performed. One of "BP", "MF", and
+"CC" sub-ontologies, or "ALL" for all three. Default to "BP".</p></li>
+<li><p>pool:</p>
+<p>If ont='ALL', whether pool three GO sub-ontologies.</p></li>
+<li><p>plot:</p>
+<p>Whether the results of enrichment analysis need to be visualized, the
+default is TRUE</p></li>
+<li><p>plotType:</p>
+<p>Whether to draw a bar plot ("bar") or a dot plot ("dot"), the default
+is "dot".</p></li>
+<li><p>plotcolor:</p>
+<p>It is the vertical axis of the picture of the enrichment analysis
+results. Users can choose "pvalue" or "p.adjust" or "qvalue". The
+default is "p.adjust".</p></li>
+<li><p>x:</p>
+<p>Character string specifying the variable to be used on the x-axis of
+the plot. Common options are "GeneRatio" or "Count".</p>
+<ul>
+<li><p>"GeneRatio": ratio of input genes annotated to a given
+term.</p></li>
+<li><p>"Count": the number of input genes annotated to the
+term.</p></li>
+</ul></li>
+<li><p>showCategory:</p>
+<p>The number of categories which will be displayed in the plots.
+Default to 10.</p></li>
+<li><p>width:</p>
+<p>Width of the PDF output in inches. Default is 11.</p></li>
+<li><p>height:</p>
+<p>Height of the PDF output in inches. Default is 7.</p></li>
+<li><p>pvalueCutoff:</p>
+<p>The p-value threshold used to filter enrichment results. Only results
+that pass the p-value test (i.e., those smaller than this value) will be
+reported. This value refers to the p-value before adjustment. The
+p-value represents the probability of observing the current level of
+enrichment under the assumption of no enrichment. The smaller the
+p-value, the more significant the enrichment result.</p></li>
+<li><p>pAdjustMethod:</p>
+<p>The p-value adjustment method used for multiple hypothesis testing,
+aimed at reducing false positives caused by multiple comparisons. One of
+"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr",
+"none".</p></li>
+<li><p>qvalueCutoff:</p>
+<p>qvalue cutoff on enrichment tests to report as significant. The
+q-value is the result of controlling the false discovery rate (FDR) and
+represents the proportion of false positives that may occur when
+conducting multiple tests.Tests must pass i) pvalueCutoff on unadjusted
+pvalues, ii) pvalueCutoff on adjusted pvalues and iii) qvalueCutoff on
+qvalues to be reported. The default is 0.2.</p></li>
+</ul>
+<h2 id="value">Value</h2>
+<p>input, An R6 class object integrating all information.</p>
+<h2 id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) { <span class="co"># \dontrun{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">loadEWAS</span>(<span class="at">input =</span> res, <span class="at">ExpoData =</span> <span class="st">&quot;default&quot;</span>, <span class="at">MethyData =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(<span class="at">input =</span> res, <span class="at">Vars =</span> <span class="st">&quot;cov1&quot;</span>, <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">startEWAS</span>(<span class="at">input =</span> res, <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>, <span class="at">model =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">expo =</span> <span class="st">&quot;default&quot;</span>, <span class="at">adjustP =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">plotEWAS</span>(<span class="at">input =</span> res, <span class="at">pval =</span> <span class="st">&quot;PVAL&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">bootEWAS</span>(<span class="at">input =</span> res, <span class="at">filterP =</span> <span class="st">&quot;PVAL&quot;</span>, <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">times =</span> <span class="dv">100</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">enrichEWAS</span>(<span class="at">input =</span> res, <span class="at">method =</span> <span class="st">&quot;GO&quot;</span>, <span class="at">filterP =</span> <span class="st">&quot;PVAL&quot;</span>, <span class="at">cutoff =</span> <span class="fl">0.05</span>, <span class="at">pAdjustMethod =</span> <span class="st">&quot;BH&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>} <span class="co"># }</span></span></code></pre></div>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 

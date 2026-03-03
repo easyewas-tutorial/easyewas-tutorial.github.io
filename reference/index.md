@@ -12,10 +12,6 @@
   : Download and cache chip annotation tables
 - [`enrichEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/enrichEWAS.md)
   : Enrichment analyses
-- [`ewasfun_lm()`](https://ytwangZero.github.io/easyEWAS/reference/ewasfun_lm.md)
-  [`ewasfun_lmer()`](https://ytwangZero.github.io/easyEWAS/reference/ewasfun_lm.md)
-  [`ewasfun_cox()`](https://ytwangZero.github.io/easyEWAS/reference/ewasfun_lm.md)
-  : EWAS Model Computation Utilities
 - [`initEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/initEWAS.md)
   : Initialize the EWAS module
 - [`loadEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/loadEWAS.md)

@@ -43,433 +43,318 @@ plots, please refer to CMplot (https://cran.r-project.org/web/packages/CMplot/in
       <h1>Visualize the results of EWAS analysis</h1>
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/R/plotEWAS.R" class="external-link"><code>R/plotEWAS.R</code></a></small>
       <div class="d-none name"><code>plotEWAS.Rd</code></div>
-    </div>
-
-    <div class="ref-description section level2">
-    <p>Visualize EWAS results based on the <code><a href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html" class="external-link">CMplot</a></code> package, including Manhattan
-plots, QQ plots, etc. Please note that this function only supports plotting a single-layer circular
-Manhattan plot. Additionally, the meaning of each parameter in this function is exactly the same as
-in <code><a href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html" class="external-link">CMplot</a></code> For more detailed information or to create multi-layer circular Manhattan
-plots, please refer to <code><a href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html" class="external-link">CMplot</a></code> (https://cran.r-project.org/web/packages/CMplot/index.html).</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotEWAS</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  p <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  threshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"jpg"</span>, <span class="st">"pdf"</span>, <span class="st">"tiff"</span>, <span class="st">"png"</span><span class="op">)</span>,</span>
-<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#4197d8"</span>, <span class="st">"#f8c120"</span>, <span class="st">"#413496"</span>, <span class="st">"#495226"</span>, <span class="st">"#d60b6f"</span>, <span class="st">"#e66519"</span>, <span class="st">"#d581b7"</span>,</span>
-<span>    <span class="st">"#83d3ad"</span>, <span class="st">"#7c162c"</span>, <span class="st">"#26755d"</span><span class="op">)</span>,</span>
-<span>  bin.size <span class="op">=</span> <span class="fl">1e+06</span>,</span>
-<span>  bin.breaks <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  LOG10 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  pch <span class="op">=</span> <span class="fl">19</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"p"</span>,</span>
-<span>  band <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  H <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  ylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axis.cex <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  axis.lwd <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  lab.cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  lab.font <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  plot.type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m"</span>, <span class="st">"c"</span>, <span class="st">"q"</span>, <span class="st">"d"</span><span class="op">)</span>,</span>
-<span>  multracks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  multracks.xaxis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  multraits <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  points.alpha <span class="op">=</span> <span class="fl">100L</span>,</span>
-<span>  r <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  cex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  outward <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="op">-</span><span class="va">log</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span><span class="op">(</span><span class="fu">italic</span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  ylab.pos <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  xticks.pos <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  mar.between <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  threshold.col <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>  threshold.lwd <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  threshold.lty <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  amplify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  signal.cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  signal.pch <span class="op">=</span> <span class="fl">19</span>,</span>
-<span>  signal.col <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  signal.line <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  highlight.cex <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  highlight.pch <span class="op">=</span> <span class="fl">19</span>,</span>
-<span>  highlight.type <span class="op">=</span> <span class="st">"p"</span>,</span>
-<span>  highlight.col <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>  highlight.text <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  highlight.text.col <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>  highlight.text.cex <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  highlight.text.font <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  chr.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  chr.border <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  chr.labels.angle <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  chr.den.col <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>  chr.pos.max <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  cir.band <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  cir.chr <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  cir.chr.h <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  cir.axis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  cir.axis.col <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>  cir.axis.grid <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  conf.int.col <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  file.output <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  file.name <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  dpi <span class="op">=</span> <span class="fl">300</span>,</span>
-<span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  main <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  main.cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  main.font <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  legend.ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  legend.cex <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  legend.pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"left"</span>, <span class="st">"middle"</span>, <span class="st">"right"</span><span class="op">)</span>,</span>
-<span>  box <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-    </div>
-
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>An R6 class integrated with all the information obtained from the startEWAS function.</p></dd>
-
-
-<dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>The user needs to specify the name of the p value selected for the result
-visualization.</p></dd>
-
-
-<dt id="arg-threshold">threshold<a class="anchor" aria-label="anchor" href="#arg-threshold"></a></dt>
-<dd><p>The significant threshold.If threshold = 0 or NULL, then the threshold line will
-not be added.</p></dd>
-
-
-<dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
-<dd><p>The format of the output image file, including "jpg","pdf","tiff", and "png".</p></dd>
-
-
-<dt id="arg-col">col<a class="anchor" aria-label="anchor" href="#arg-col"></a></dt>
-<dd><p>A vector specifies the colors for the chromosomes. If the length of col is shorter than
-the number of chromosomes, the colors will be applied cyclically.</p></dd>
-
-
-<dt id="arg-bin-size">bin.size<a class="anchor" aria-label="anchor" href="#arg-bin-size"></a></dt>
-<dd><p>a integer, the size of bin in bp for marker density plot.</p></dd>
-
-
-<dt id="arg-bin-breaks">bin.breaks<a class="anchor" aria-label="anchor" href="#arg-bin-breaks"></a></dt>
-<dd><p>a vector, set the breaks for the legend of density plot, e.g., seq(min, max, step),
-the windows in which the number of markers is out of the this range will be plotted in the same colors
-with the min or max value.</p></dd>
-
-
-<dt id="arg-log-">LOG10<a class="anchor" aria-label="anchor" href="#arg-log-"></a></dt>
-<dd><p>logical, whether to change the p-value into log10(p-value) scale.</p></dd>
-
-
-<dt id="arg-pch">pch<a class="anchor" aria-label="anchor" href="#arg-pch"></a></dt>
-<dd><p>a integer, the shape for the points, is the same with "pch" in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></code>.</p></dd>
-
-
-<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>a character, could be "p" (point), "l" (cross line), "h" (vertical lines) and so on,
-is the same with "type" in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></code>.</p></dd>
-
-
-<dt id="arg-band">band<a class="anchor" aria-label="anchor" href="#arg-band"></a></dt>
-<dd><p>a number, the size of space between chromosomes, the default is 1.</p></dd>
-
-
-<dt id="arg-h">H<a class="anchor" aria-label="anchor" href="#arg-h"></a></dt>
-<dd><p>A number controlling the height of the circular Manhattan track.</p></dd>
-
-
-<dt id="arg-ylim">ylim<a class="anchor" aria-label="anchor" href="#arg-ylim"></a></dt>
-<dd><p>vector (c(min, max)), CMplot will only plot the points among this interval.</p></dd>
-
-
-<dt id="arg-axis-cex">axis.cex<a class="anchor" aria-label="anchor" href="#arg-axis-cex"></a></dt>
-<dd><p>a number, controls the size of ticks labels of X/Y-axis and the ticks labels of axis
-for circle plot.</p></dd>
-
-
-<dt id="arg-axis-lwd">axis.lwd<a class="anchor" aria-label="anchor" href="#arg-axis-lwd"></a></dt>
-<dd><p>a number, controls the thickness of X/Y-axis lines and the thickness of axis for circle plot.</p></dd>
-
-
-<dt id="arg-lab-cex">lab.cex<a class="anchor" aria-label="anchor" href="#arg-lab-cex"></a></dt>
-<dd><p>a number, controls the size of labels of X/Y-axis and the labels of chromosomes for circle plot.</p></dd>
-
-
-<dt id="arg-lab-font">lab.font<a class="anchor" aria-label="anchor" href="#arg-lab-font"></a></dt>
-<dd><p>a number, controls the font of labels of all axis.</p></dd>
-
-
-<dt id="arg-plot-type">plot.type<a class="anchor" aria-label="anchor" href="#arg-plot-type"></a></dt>
-<dd><p>a character or vector, only "d", "c", "m", "q" can be used. if plot.type="d",
-CpG density will be plotted; if plot.type="c", only circle-Manhattan plot will be plotted; if
-plot.type="m",only Manhattan plot will be plotted; if plot.type="q",only Q-Q plot will be plotted;
-if plot.type=c("m","q"), Both Manhattan and Q-Q plots will be plotted.</p></dd>
-
-
-<dt id="arg-multracks">multracks<a class="anchor" aria-label="anchor" href="#arg-multracks"></a></dt>
-<dd><p>Logical. Whether to use multi-track mode in CMplot.</p></dd>
-
-
-<dt id="arg-multracks-xaxis">multracks.xaxis<a class="anchor" aria-label="anchor" href="#arg-multracks-xaxis"></a></dt>
-<dd><p>Logical. Whether to draw x-axis in multi-track mode.</p></dd>
-
-
-<dt id="arg-multraits">multraits<a class="anchor" aria-label="anchor" href="#arg-multraits"></a></dt>
-<dd><p>Logical. Whether to use multi-trait mode in CMplot.</p></dd>
-
-
-<dt id="arg-points-alpha">points.alpha<a class="anchor" aria-label="anchor" href="#arg-points-alpha"></a></dt>
-<dd><p>Integer. Transparency (alpha) value for points (0–255). Default is 100.</p></dd>
-
-
-<dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>a number, the radius for the circle (the inside radius), the default is 1.</p></dd>
-
-
-<dt id="arg-cex">cex<a class="anchor" aria-label="anchor" href="#arg-cex"></a></dt>
-<dd><p>a number or a vector, the size for the points, is the same with "size" in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></code>, and if
-it is a vector, the first number controls the size of points in circle plot(the default is 0.5), the
-second number controls the size of points in Manhattan plot (the default is 1), the third number controls
-the size of points in Q-Q plot (the default is 1)</p></dd>
-
-
-<dt id="arg-outward">outward<a class="anchor" aria-label="anchor" href="#arg-outward"></a></dt>
-<dd><p>logical, if TRUE, all points will be plotted from inside to outside for circular Manhattan plot.</p></dd>
-
-
-<dt id="arg-ylab">ylab<a class="anchor" aria-label="anchor" href="#arg-ylab"></a></dt>
-<dd><p>a character, the labels for y axis.</p></dd>
-
-
-<dt id="arg-ylab-pos">ylab.pos<a class="anchor" aria-label="anchor" href="#arg-ylab-pos"></a></dt>
-<dd><p>the distance between ylab and yaxis.</p></dd>
-
-
-<dt id="arg-xticks-pos">xticks.pos<a class="anchor" aria-label="anchor" href="#arg-xticks-pos"></a></dt>
-<dd><p>the distance between labels of x ticks and x axis.</p></dd>
-
-
-<dt id="arg-mar">mar<a class="anchor" aria-label="anchor" href="#arg-mar"></a></dt>
-<dd><p>the size of white gaps around the plot, 4 values should be provided, indicating the direction
-of bottom, left, up, and right.</p></dd>
-
-
-<dt id="arg-mar-between">mar.between<a class="anchor" aria-label="anchor" href="#arg-mar-between"></a></dt>
-<dd><p>Space between tracks for multi-track plotting.</p></dd>
-
-
-<dt id="arg-threshold-col">threshold.col<a class="anchor" aria-label="anchor" href="#arg-threshold-col"></a></dt>
-<dd><p>a character or vector, the color for the line of threshold levels, it can also
-control the color of the diagonal line of QQplot.</p></dd>
-
-
-<dt id="arg-threshold-lwd">threshold.lwd<a class="anchor" aria-label="anchor" href="#arg-threshold-lwd"></a></dt>
-<dd><p>a number or vector, the width for the line of threshold levels, it can also
-control the thickness of the diagonal line of QQplot.</p></dd>
-
-
-<dt id="arg-threshold-lty">threshold.lty<a class="anchor" aria-label="anchor" href="#arg-threshold-lty"></a></dt>
-<dd><p>a number or vector, the type for the line of threshold levels, it can also
-control the type of the diagonal line of QQplot</p></dd>
-
-
-<dt id="arg-amplify">amplify<a class="anchor" aria-label="anchor" href="#arg-amplify"></a></dt>
-<dd><p>logical, CMplot can amplify the significant points, if TRUE, then the points bigger
-than the minimal significant level will be amplified, the default: amplify=TRUE.</p></dd>
-
-
-<dt id="arg-signal-cex">signal.cex<a class="anchor" aria-label="anchor" href="#arg-signal-cex"></a></dt>
-<dd><p>a number, if amplify=TRUE, users can set the size of significant points.</p></dd>
-
-
-<dt id="arg-signal-pch">signal.pch<a class="anchor" aria-label="anchor" href="#arg-signal-pch"></a></dt>
-<dd><p>a number, if amplify=TRUE, users can set the shape of significant points.</p></dd>
-
-
-<dt id="arg-signal-col">signal.col<a class="anchor" aria-label="anchor" href="#arg-signal-col"></a></dt>
-<dd><p>a character, if amplify=TRUE, users can set the colour of significant points,
-if signal.col=NULL, then the colors of significant points will not be changed.</p></dd>
-
-
-<dt id="arg-signal-line">signal.line<a class="anchor" aria-label="anchor" href="#arg-signal-line"></a></dt>
-<dd><p>a number, the thickness of the lines of significant CpGs cross the circle.</p></dd>
-
-
-<dt id="arg-highlight">highlight<a class="anchor" aria-label="anchor" href="#arg-highlight"></a></dt>
-<dd><p>a vector, names of CpGs which need to be highlighted.</p></dd>
-
-
-<dt id="arg-highlight-cex">highlight.cex<a class="anchor" aria-label="anchor" href="#arg-highlight-cex"></a></dt>
-<dd><p>a vector, the size of points for CpGs which need to be highlighted.</p></dd>
-
-
-<dt id="arg-highlight-pch">highlight.pch<a class="anchor" aria-label="anchor" href="#arg-highlight-pch"></a></dt>
-<dd><p>a vector, the pch of points for CpGs which need to be highlighted.</p></dd>
-
-
-<dt id="arg-highlight-type">highlight.type<a class="anchor" aria-label="anchor" href="#arg-highlight-type"></a></dt>
-<dd><p>a vector, the type of points for CpGs which need to be highlighted.</p></dd>
-
-
-<dt id="arg-highlight-col">highlight.col<a class="anchor" aria-label="anchor" href="#arg-highlight-col"></a></dt>
-<dd><p>a vector, the col of points for CpGs which need to be highlighted.</p></dd>
-
-
-<dt id="arg-highlight-text">highlight.text<a class="anchor" aria-label="anchor" href="#arg-highlight-text"></a></dt>
-<dd><p>a vector, the text which would be added around the highlighted CpGs.</p></dd>
-
-
-<dt id="arg-highlight-text-col">highlight.text.col<a class="anchor" aria-label="anchor" href="#arg-highlight-text-col"></a></dt>
-<dd><p>a vector, the color for added text.</p></dd>
-
-
-<dt id="arg-highlight-text-cex">highlight.text.cex<a class="anchor" aria-label="anchor" href="#arg-highlight-text-cex"></a></dt>
-<dd><p>a value, the size for added text.</p></dd>
-
-
-<dt id="arg-highlight-text-font">highlight.text.font<a class="anchor" aria-label="anchor" href="#arg-highlight-text-font"></a></dt>
-<dd><p>text font for the highlighted CpGs</p></dd>
-
-
-<dt id="arg-chr-labels">chr.labels<a class="anchor" aria-label="anchor" href="#arg-chr-labels"></a></dt>
-<dd><p>a vector, the labels for the chromosomes of density plot and Manhattan plot.</p></dd>
-
-
-<dt id="arg-chr-border">chr.border<a class="anchor" aria-label="anchor" href="#arg-chr-border"></a></dt>
-<dd><p>a logical, whether to plot the dot line between chromosomes.</p></dd>
-
-
-<dt id="arg-chr-labels-angle">chr.labels.angle<a class="anchor" aria-label="anchor" href="#arg-chr-labels-angle"></a></dt>
-<dd><p>a value, rotate tick labels of x-axis for Manhattan plot (-90 &lt; chr.labels.angle &lt; 90).</p></dd>
-
-
-<dt id="arg-chr-den-col">chr.den.col<a class="anchor" aria-label="anchor" href="#arg-chr-den-col"></a></dt>
-<dd><p>a character or vector or NULL, the colour for the CpG density. If the length of parameter
-'chr.den.col' is bigger than 1, CpG density that counts the number of CpG within given size ('bin.size')
-will be plotted around the circle. If chr.den.col=NULL, the density bar will not be attached on the bottom
-of manhattan plot.</p></dd>
-
-
-<dt id="arg-chr-pos-max">chr.pos.max<a class="anchor" aria-label="anchor" href="#arg-chr-pos-max"></a></dt>
-<dd><p>logical, whether the physical positions of each chromosome contain the maximum length
-of the chromosome.</p></dd>
-
-
-<dt id="arg-cir-band">cir.band<a class="anchor" aria-label="anchor" href="#arg-cir-band"></a></dt>
-<dd><p>A number controlling the spacing between circular tracks.</p></dd>
-
-
-<dt id="arg-cir-chr">cir.chr<a class="anchor" aria-label="anchor" href="#arg-cir-chr"></a></dt>
-<dd><p>logical, a boundary that represents chromosomes will be plotted on the periphery of a circle,
-the default is TRUE.</p></dd>
-
-
-<dt id="arg-cir-chr-h">cir.chr.h<a class="anchor" aria-label="anchor" href="#arg-cir-chr-h"></a></dt>
-<dd><p>a number, the width for the boundary, if cir.chr=FALSE, then this parameter will be useless.</p></dd>
-
-
-<dt id="arg-cir-axis">cir.axis<a class="anchor" aria-label="anchor" href="#arg-cir-axis"></a></dt>
-<dd><p>a logical, whether to add the axis of circle Manhattan plot.</p></dd>
-
-
-<dt id="arg-cir-axis-col">cir.axis.col<a class="anchor" aria-label="anchor" href="#arg-cir-axis-col"></a></dt>
-<dd><p>a character, the color of the axis for circle.</p></dd>
-
-
-<dt id="arg-cir-axis-grid">cir.axis.grid<a class="anchor" aria-label="anchor" href="#arg-cir-axis-grid"></a></dt>
-<dd><p>logical, whether to add axis grid line in circles.</p></dd>
-
-
-<dt id="arg-conf-int">conf.int<a class="anchor" aria-label="anchor" href="#arg-conf-int"></a></dt>
-<dd><p>logical, whether to plot confidence interval on QQ-plot.</p></dd>
-
-
-<dt id="arg-conf-int-col">conf.int.col<a class="anchor" aria-label="anchor" href="#arg-conf-int-col"></a></dt>
-<dd><p>character or vector, the color of confidence interval of QQplot.</p></dd>
-
-
-<dt id="arg-file-output">file.output<a class="anchor" aria-label="anchor" href="#arg-file-output"></a></dt>
-<dd><p>a logical, users can choose whether to output the plot results.</p></dd>
-
-
-<dt id="arg-file-name">file.name<a class="anchor" aria-label="anchor" href="#arg-file-name"></a></dt>
-<dd><p>a character or vector, the names of output files.</p></dd>
-
-
-<dt id="arg-dpi">dpi<a class="anchor" aria-label="anchor" href="#arg-dpi"></a></dt>
-<dd><p>a number, the picture resolution for '.jpg', '.npg', and '.tiff' files. The default is 300.</p></dd>
-
-
-<dt id="arg-height">height<a class="anchor" aria-label="anchor" href="#arg-height"></a></dt>
-<dd><p>the height of output files.</p></dd>
-
-
-<dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
-<dd><p>the width of output files.</p></dd>
-
-
-<dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
-<dd><p>character of vector, the title of the plot for manhattan plot and qqplot.</p></dd>
-
-
-<dt id="arg-main-cex">main.cex<a class="anchor" aria-label="anchor" href="#arg-main-cex"></a></dt>
-<dd><p>size of title.</p></dd>
-
-
-<dt id="arg-main-font">main.font<a class="anchor" aria-label="anchor" href="#arg-main-font"></a></dt>
-<dd><p>font of title.</p></dd>
-
-
-<dt id="arg-legend-ncol">legend.ncol<a class="anchor" aria-label="anchor" href="#arg-legend-ncol"></a></dt>
-<dd><p>Number of columns used in the legend.</p></dd>
-
-
-<dt id="arg-legend-cex">legend.cex<a class="anchor" aria-label="anchor" href="#arg-legend-cex"></a></dt>
-<dd><p>A numeric value controlling legend text size.</p></dd>
-
-
-<dt id="arg-legend-pos">legend.pos<a class="anchor" aria-label="anchor" href="#arg-legend-pos"></a></dt>
-<dd><p>A character value specifying legend position.</p></dd>
-
-
-<dt id="arg-box">box<a class="anchor" aria-label="anchor" href="#arg-box"></a></dt>
-<dd><p>logical, this function draws a box around the current plot.</p></dd>
-
-
-<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>whether to print the log information.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The updated input object, including CMplot-ready data stored in input$CMplot.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadEWAS.html">loadEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, ExpoData <span class="op">=</span> <span class="st">"default"</span>, MethyData <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="transEWAS.html">transEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, Vars <span class="op">=</span> <span class="st">"cov1"</span>, TypeTo <span class="op">=</span> <span class="st">"factor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="startEWAS.html">startEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, chipType <span class="op">=</span> <span class="st">"EPICV2"</span>, model <span class="op">=</span> <span class="st">"lm"</span>, expo <span class="op">=</span> <span class="st">"var"</span>, adjustP <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">plotEWAS</span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, p <span class="op">=</span> <span class="st">"PVAL"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-</code></pre></div>
-    </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    <p>Visualize EWAS results based on the <a
+href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html"><code>CMplot</code></a>
+package, including Manhattan plots, QQ plots, etc. Please note that this
+function only supports plotting a single-layer circular Manhattan plot.
+Additionally, the meaning of each parameter in this function is exactly
+the same as in <a
+href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html"><code>CMplot</code></a>
+For more detailed information or to create multi-layer circular
+Manhattan plots, please refer to <a
+href="https://rdrr.io/pkg/CMplot/man/CMplot-package.html"><code>CMplot</code></a>
+(<a
+href="https://cran.r-project.org/web/packages/CMplot/index.html">https://cran.r-project.org/web/packages/CMplot/index.html</a>).</p>
+<h2 id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotEWAS</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  input,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> <span class="st">&quot;PVAL&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="fu">c</span>(<span class="st">&quot;jpg&quot;</span>, <span class="st">&quot;pdf&quot;</span>, <span class="st">&quot;tiff&quot;</span>, <span class="st">&quot;png&quot;</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#4197d8&quot;</span>, <span class="st">&quot;#f8c120&quot;</span>, <span class="st">&quot;#413496&quot;</span>, <span class="st">&quot;#495226&quot;</span>, <span class="st">&quot;#d60b6f&quot;</span>, <span class="st">&quot;#e66519&quot;</span>, <span class="st">&quot;#d581b7&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;#83d3ad&quot;</span>, <span class="st">&quot;#7c162c&quot;</span>, <span class="st">&quot;#26755d&quot;</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">bin.size =</span> <span class="fl">1e+06</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">bin.breaks =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">LOG10 =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;p&quot;</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">band =</span> <span class="dv">1</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">H =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.cex =</span> <span class="dv">1</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">lab.cex =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">lab.font =</span> <span class="dv">2</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot.type =</span> <span class="fu">c</span>(<span class="st">&quot;m&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;q&quot;</span>, <span class="st">&quot;d&quot;</span>),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">multracks =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">multracks.xaxis =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">multraits =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">points.alpha =</span> <span class="dv">100</span><span class="dt">L</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">r =</span> <span class="fl">0.3</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">outward =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="fu">expression</span>(<span class="sc">-</span>log[<span class="dv">10</span>](<span class="fu">italic</span>(p))),</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab.pos =</span> <span class="dv">3</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">xticks.pos =</span> <span class="dv">1</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">3</span>),</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">mar.between =</span> <span class="dv">0</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold.col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold.lwd =</span> <span class="dv">1</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold.lty =</span> <span class="dv">2</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">amplify =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal.cex =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal.pch =</span> <span class="dv">19</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal.col =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal.line =</span> <span class="dv">2</span>,</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.cex =</span> <span class="dv">1</span>,</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.pch =</span> <span class="dv">19</span>,</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.type =</span> <span class="st">&quot;p&quot;</span>,</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.col =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.text =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.text.col =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.text.cex =</span> <span class="dv">1</span>,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlight.text.font =</span> <span class="dv">3</span>,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">chr.labels =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">chr.border =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">chr.labels.angle =</span> <span class="dv">0</span>,</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">chr.den.col =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">chr.pos.max =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">cir.band =</span> <span class="dv">1</span>,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">cir.chr =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">cir.chr.h =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  <span class="at">cir.axis =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  <span class="at">cir.axis.col =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  <span class="at">cir.axis.grid =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.int.col =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">file.output =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">file.name =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">dpi =</span> <span class="dv">300</span>,</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>  <span class="at">main.cex =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>  <span class="at">main.font =</span> <span class="dv">2</span>,</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.ncol =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.cex =</span> <span class="dv">1</span>,</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.pos =</span> <span class="fu">c</span>(<span class="st">&quot;left&quot;</span>, <span class="st">&quot;middle&quot;</span>, <span class="st">&quot;right&quot;</span>),</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">box =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="arguments">Arguments</h2>
+<ul>
+<li><p>input:</p>
+<p>An R6 class integrated with all the information obtained from the
+startEWAS function.</p></li>
+<li><p>p:</p>
+<p>The user needs to specify the name of the p value selected for the
+result visualization.</p></li>
+<li><p>threshold:</p>
+<p>The significant threshold.If threshold = 0 or NULL, then the
+threshold line will not be added.</p></li>
+<li><p>file:</p>
+<p>The format of the output image file, including "jpg","pdf","tiff",
+and "png".</p></li>
+<li><p>col:</p>
+<p>A vector specifies the colors for the chromosomes. If the length of
+col is shorter than the number of chromosomes, the colors will be
+applied cyclically.</p></li>
+<li><p>bin.size:</p>
+<p>a integer, the size of bin in bp for marker density plot.</p></li>
+<li><p>bin.breaks:</p>
+<p>a vector, set the breaks for the legend of density plot, e.g.,
+seq(min, max, step), the windows in which the number of markers is out
+of the this range will be plotted in the same colors with the min or max
+value.</p></li>
+<li><p>LOG10:</p>
+<p>logical, whether to change the p-value into log10(p-value)
+scale.</p></li>
+<li><p>pch:</p>
+<p>a integer, the shape for the points, is the same with "pch" in <a
+href="https://rdrr.io/r/graphics/plot.default.html"><code>plot</code></a>.</p></li>
+<li><p>type:</p>
+<p>a character, could be "p" (point), "l" (cross line), "h" (vertical
+lines) and so on, is the same with "type" in <a
+href="https://rdrr.io/r/graphics/plot.default.html"><code>plot</code></a>.</p></li>
+<li><p>band:</p>
+<p>a number, the size of space between chromosomes, the default is
+1.</p></li>
+<li><p>H:</p>
+<p>A number controlling the height of the circular Manhattan
+track.</p></li>
+<li><p>ylim:</p>
+<p>vector (c(min, max)), CMplot will only plot the points among this
+interval.</p></li>
+<li><p>axis.cex:</p>
+<p>a number, controls the size of ticks labels of X/Y-axis and the ticks
+labels of axis for circle plot.</p></li>
+<li><p>axis.lwd:</p>
+<p>a number, controls the thickness of X/Y-axis lines and the thickness
+of axis for circle plot.</p></li>
+<li><p>lab.cex:</p>
+<p>a number, controls the size of labels of X/Y-axis and the labels of
+chromosomes for circle plot.</p></li>
+<li><p>lab.font:</p>
+<p>a number, controls the font of labels of all axis.</p></li>
+<li><p>plot.type:</p>
+<p>a character or vector, only "d", "c", "m", "q" can be used. if
+plot.type="d", CpG density will be plotted; if plot.type="c", only
+circle-Manhattan plot will be plotted; if plot.type="m",only Manhattan
+plot will be plotted; if plot.type="q",only Q-Q plot will be plotted; if
+plot.type=c("m","q"), Both Manhattan and Q-Q plots will be
+plotted.</p></li>
+<li><p>multracks:</p>
+<p>Logical. Whether to use multi-track mode in CMplot.</p></li>
+<li><p>multracks.xaxis:</p>
+<p>Logical. Whether to draw x-axis in multi-track mode.</p></li>
+<li><p>multraits:</p>
+<p>Logical. Whether to use multi-trait mode in CMplot.</p></li>
+<li><p>points.alpha:</p>
+<p>Integer. Transparency (alpha) value for points (0–255). Default is
+100.</p></li>
+<li><p>r:</p>
+<p>a number, the radius for the circle (the inside radius), the default
+is 1.</p></li>
+<li><p>cex:</p>
+<p>a number or a vector, the size for the points, is the same with
+"size" in <a
+href="https://rdrr.io/r/graphics/plot.default.html"><code>plot</code></a>,
+and if it is a vector, the first number controls the size of points in
+circle plot(the default is 0.5), the second number controls the size of
+points in Manhattan plot (the default is 1), the third number controls
+the size of points in Q-Q plot (the default is 1)</p></li>
+<li><p>outward:</p>
+<p>logical, if TRUE, all points will be plotted from inside to outside
+for circular Manhattan plot.</p></li>
+<li><p>ylab:</p>
+<p>a character, the labels for y axis.</p></li>
+<li><p>ylab.pos:</p>
+<p>the distance between ylab and yaxis.</p></li>
+<li><p>xticks.pos:</p>
+<p>the distance between labels of x ticks and x axis.</p></li>
+<li><p>mar:</p>
+<p>the size of white gaps around the plot, 4 values should be provided,
+indicating the direction of bottom, left, up, and right.</p></li>
+<li><p>mar.between:</p>
+<p>Space between tracks for multi-track plotting.</p></li>
+<li><p>threshold.col:</p>
+<p>a character or vector, the color for the line of threshold levels, it
+can also control the color of the diagonal line of QQplot.</p></li>
+<li><p>threshold.lwd:</p>
+<p>a number or vector, the width for the line of threshold levels, it
+can also control the thickness of the diagonal line of QQplot.</p></li>
+<li><p>threshold.lty:</p>
+<p>a number or vector, the type for the line of threshold levels, it can
+also control the type of the diagonal line of QQplot</p></li>
+<li><p>amplify:</p>
+<p>logical, CMplot can amplify the significant points, if TRUE, then the
+points bigger than the minimal significant level will be amplified, the
+default: amplify=TRUE.</p></li>
+<li><p>signal.cex:</p>
+<p>a number, if amplify=TRUE, users can set the size of significant
+points.</p></li>
+<li><p>signal.pch:</p>
+<p>a number, if amplify=TRUE, users can set the shape of significant
+points.</p></li>
+<li><p>signal.col:</p>
+<p>a character, if amplify=TRUE, users can set the colour of significant
+points, if signal.col=NULL, then the colors of significant points will
+not be changed.</p></li>
+<li><p>signal.line:</p>
+<p>a number, the thickness of the lines of significant CpGs cross the
+circle.</p></li>
+<li><p>highlight:</p>
+<p>a vector, names of CpGs which need to be highlighted.</p></li>
+<li><p>highlight.cex:</p>
+<p>a vector, the size of points for CpGs which need to be
+highlighted.</p></li>
+<li><p>highlight.pch:</p>
+<p>a vector, the pch of points for CpGs which need to be
+highlighted.</p></li>
+<li><p>highlight.type:</p>
+<p>a vector, the type of points for CpGs which need to be
+highlighted.</p></li>
+<li><p>highlight.col:</p>
+<p>a vector, the col of points for CpGs which need to be
+highlighted.</p></li>
+<li><p>highlight.text:</p>
+<p>a vector, the text which would be added around the highlighted
+CpGs.</p></li>
+<li><p>highlight.text.col:</p>
+<p>a vector, the color for added text.</p></li>
+<li><p>highlight.text.cex:</p>
+<p>a value, the size for added text.</p></li>
+<li><p>highlight.text.font:</p>
+<p>text font for the highlighted CpGs</p></li>
+<li><p>chr.labels:</p>
+<p>a vector, the labels for the chromosomes of density plot and
+Manhattan plot.</p></li>
+<li><p>chr.border:</p>
+<p>a logical, whether to plot the dot line between chromosomes.</p></li>
+<li><p>chr.labels.angle:</p>
+<p>a value, rotate tick labels of x-axis for Manhattan plot (-90 &lt;
+chr.labels.angle &lt; 90).</p></li>
+<li><p>chr.den.col:</p>
+<p>a character or vector or NULL, the colour for the CpG density. If the
+length of parameter 'chr.den.col' is bigger than 1, CpG density that
+counts the number of CpG within given size ('bin.size') will be plotted
+around the circle. If chr.den.col=NULL, the density bar will not be
+attached on the bottom of manhattan plot.</p></li>
+<li><p>chr.pos.max:</p>
+<p>logical, whether the physical positions of each chromosome contain
+the maximum length of the chromosome.</p></li>
+<li><p>cir.band:</p>
+<p>A number controlling the spacing between circular tracks.</p></li>
+<li><p>cir.chr:</p>
+<p>logical, a boundary that represents chromosomes will be plotted on
+the periphery of a circle, the default is TRUE.</p></li>
+<li><p>cir.chr.h:</p>
+<p>a number, the width for the boundary, if cir.chr=FALSE, then this
+parameter will be useless.</p></li>
+<li><p>cir.axis:</p>
+<p>a logical, whether to add the axis of circle Manhattan plot.</p></li>
+<li><p>cir.axis.col:</p>
+<p>a character, the color of the axis for circle.</p></li>
+<li><p>cir.axis.grid:</p>
+<p>logical, whether to add axis grid line in circles.</p></li>
+<li><p>conf.int:</p>
+<p>logical, whether to plot confidence interval on QQ-plot.</p></li>
+<li><p>conf.int.col:</p>
+<p>character or vector, the color of confidence interval of
+QQplot.</p></li>
+<li><p>file.output:</p>
+<p>a logical, users can choose whether to output the plot
+results.</p></li>
+<li><p>file.name:</p>
+<p>a character or vector, the names of output files.</p></li>
+<li><p>dpi:</p>
+<p>a number, the picture resolution for '.jpg', '.npg', and '.tiff'
+files. The default is 300.</p></li>
+<li><p>height:</p>
+<p>the height of output files.</p></li>
+<li><p>width:</p>
+<p>the width of output files.</p></li>
+<li><p>main:</p>
+<p>character of vector, the title of the plot for manhattan plot and
+qqplot.</p></li>
+<li><p>main.cex:</p>
+<p>size of title.</p></li>
+<li><p>main.font:</p>
+<p>font of title.</p></li>
+<li><p>legend.ncol:</p>
+<p>Number of columns used in the legend.</p></li>
+<li><p>legend.cex:</p>
+<p>A numeric value controlling legend text size.</p></li>
+<li><p>legend.pos:</p>
+<p>A character value specifying legend position.</p></li>
+<li><p>box:</p>
+<p>logical, this function draws a box around the current plot.</p></li>
+<li><p>verbose:</p>
+<p>whether to print the log information.</p></li>
+</ul>
+<h2 id="value">Value</h2>
+<p>The updated input object, including CMplot-ready data stored in
+input$CMplot.</p>
+<h2 id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) { <span class="co"># \dontrun{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">loadEWAS</span>(<span class="at">input =</span> res, <span class="at">ExpoData =</span> <span class="st">&quot;default&quot;</span>, <span class="at">MethyData =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(<span class="at">input =</span> res, <span class="at">Vars =</span> <span class="st">&quot;cov1&quot;</span>, <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">startEWAS</span>(<span class="at">input =</span> res, <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>, <span class="at">model =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">expo =</span> <span class="st">&quot;var&quot;</span>, <span class="at">adjustP =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">plotEWAS</span>(<span class="at">input =</span> res, <span class="at">p =</span> <span class="st">&quot;PVAL&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>} <span class="co"># }</span></span></code></pre></div>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 

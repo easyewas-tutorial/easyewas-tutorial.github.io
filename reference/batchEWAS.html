@@ -39,93 +39,65 @@ either parametric or non-parametric empirical Bayes frameworks for adjusting dat
       <h1>Perform batch effect correction</h1>
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/R/batchEWAS.R" class="external-link"><code>R/batchEWAS.R</code></a></small>
       <div class="d-none name"><code>batchEWAS.Rd</code></div>
-    </div>
-
-    <div class="ref-description section level2">
-    <p>Perform batch effect correction based on the function <code><a href="https://rdrr.io/pkg/sva/man/ComBat.html" class="external-link">ComBat</a></code>
-form R package <span class="pkg">sva</span>. It requires that the "batches" in the data set are known. It uses
-either parametric or non-parametric empirical Bayes frameworks for adjusting data for batch effects.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">batchEWAS</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  adjustVar <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  batch <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  par.prior <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  mean.only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ref.batch <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  core <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-    </div>
-
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>An R6 class integrated with all the information.</p></dd>
-
-
-<dt id="arg-adjustvar">adjustVar<a class="anchor" aria-label="anchor" href="#arg-adjustvar"></a></dt>
-<dd><p>(Optional) Names of the variate of interest and other covariates besides batch,
-with each name separated by a comma. Ensure that when correcting for batch effects, the effects
-of other factors are appropriately considered and adjusted for.Ensure there are no space. e.g.
-"cov1,cov2".</p></dd>
-
-
-<dt id="arg-batch">batch<a class="anchor" aria-label="anchor" href="#arg-batch"></a></dt>
-<dd><p>Name of the batch variable.</p></dd>
-
-
-<dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
-<dd><p>Logical. TRUE give prior plots with black as a kernel estimate of the empirical
-batch effect density and red as the parametric. Thr default is FALSE.</p></dd>
-
-
-<dt id="arg-par-prior">par.prior<a class="anchor" aria-label="anchor" href="#arg-par-prior"></a></dt>
-<dd><p>Logical. TRUE indicates parametric adjustments will be used, FALSE indicates
-non-parametric adjustments will be used.</p></dd>
-
-
-<dt id="arg-mean-only">mean.only<a class="anchor" aria-label="anchor" href="#arg-mean-only"></a></dt>
-<dd><p>Logical. Default to FALSE. If TRUE, ComBat only corrects the mean of the
-batch effect (no scale adjustment).</p></dd>
-
-
-<dt id="arg-ref-batch">ref.batch<a class="anchor" aria-label="anchor" href="#arg-ref-batch"></a></dt>
-<dd><p>(Optional) NULL If given, will use the selected batch as a reference for batch
-adjustment.</p></dd>
-
-
-<dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>Logical. Whether to enable parallel computing during batch effect correction.
-Default is <code>FALSE</code>.</p></dd>
-
-
-<dt id="arg-core">core<a class="anchor" aria-label="anchor" href="#arg-core"></a></dt>
-<dd><p>Integer. Number of CPU cores to use if <code>parallel = TRUE</code>. Default is <code>NULL</code>.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>input, An R6 class object integrating all information.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadEWAS.html">loadEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, ExpoData <span class="op">=</span> <span class="st">"default"</span>, MethyData <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="transEWAS.html">transEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, Vars <span class="op">=</span> <span class="st">"cov1"</span>, TypeTo <span class="op">=</span> <span class="st">"factor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">batchEWAS</span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, batch <span class="op">=</span> <span class="st">"batch"</span>, par.prior<span class="op">=</span><span class="cn">TRUE</span>, ref.batch <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-</code></pre></div>
-    </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    <p>Perform batch effect correction based on the function <a
+href="https://rdrr.io/pkg/sva/man/ComBat.html"><code>ComBat</code></a>
+form R package sva. It requires that the "batches" in the data set are
+known. It uses either parametric or non-parametric empirical Bayes
+frameworks for adjusting data for batch effects.</p>
+<h2 id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">batchEWAS</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  input,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjustVar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">par.prior =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.only =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref.batch =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallel =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">core =</span> <span class="cn">NULL</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="arguments">Arguments</h2>
+<ul>
+<li><p>input:</p>
+<p>An R6 class integrated with all the information.</p></li>
+<li><p>adjustVar:</p>
+<p>(Optional) Names of the variate of interest and other covariates
+besides batch, with each name separated by a comma. Ensure that when
+correcting for batch effects, the effects of other factors are
+appropriately considered and adjusted for.Ensure there are no space.
+e.g. "cov1,cov2".</p></li>
+<li><p>batch:</p>
+<p>Name of the batch variable.</p></li>
+<li><p>plot:</p>
+<p>Logical. TRUE give prior plots with black as a kernel estimate of the
+empirical batch effect density and red as the parametric. Thr default is
+FALSE.</p></li>
+<li><p>par.prior:</p>
+<p>Logical. TRUE indicates parametric adjustments will be used, FALSE
+indicates non-parametric adjustments will be used.</p></li>
+<li><p>mean.only:</p>
+<p>Logical. Default to FALSE. If TRUE, ComBat only corrects the mean of
+the batch effect (no scale adjustment).</p></li>
+<li><p>ref.batch:</p>
+<p>(Optional) NULL If given, will use the selected batch as a reference
+for batch adjustment.</p></li>
+<li><p>parallel:</p>
+<p>Logical. Whether to enable parallel computing during batch effect
+correction. Default is <code>FALSE</code>.</p></li>
+<li><p>core:</p>
+<p>Integer. Number of CPU cores to use if <code>parallel = TRUE</code>.
+Default is <code>NULL</code>.</p></li>
+</ul>
+<h2 id="value">Value</h2>
+<p>input, An R6 class object integrating all information.</p>
+<h2 id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) { <span class="co"># \dontrun{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">loadEWAS</span>(<span class="at">input =</span> res, <span class="at">ExpoData =</span> <span class="st">&quot;default&quot;</span>, <span class="at">MethyData =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(<span class="at">input =</span> res, <span class="at">Vars =</span> <span class="st">&quot;cov1&quot;</span>, <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">batchEWAS</span>(<span class="at">input =</span> res, <span class="at">batch =</span> <span class="st">&quot;batch&quot;</span>, <span class="at">par.prior=</span><span class="cn">TRUE</span>, <span class="at">ref.batch =</span> <span class="cn">NULL</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>} <span class="co"># }</span></span></code></pre></div>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 

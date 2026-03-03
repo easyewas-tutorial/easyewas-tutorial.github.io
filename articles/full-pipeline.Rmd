@@ -1,0 +1,266 @@
+---
+title: "easyEWAS Tutorial"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette: default
+vignette: >
+  %\VignetteIndexEntry{easyEWAS Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+easyEWAS is a user-friendly R package designed for conducting epigenome-wide association studies (EWAS). With easyEWAS, we provide a battery of statistical methods to support differential methylation position analysis across various scenarios, as well as differential methylation region analysis based on the DMRcate method. To facilitate result interpretation, we provide comprehensive functional annotation and result visualization functionalities. Additionally, bootstrap-based internal validation is incorporated to evaluate the robustness of EWAS results. easyEWAS is compatible with currently most cited Illumina high-density microarray platforms for genome-wide methylation profiling, including 27K, 450K, EPIC V1, EPIC V2, and MSA arrays.
+
+## Installation
+
+Users can install the easyEWAS package by running:
+
+```{r installation, eval=FALSE}
+devtools::install_github("ytwangZero/easyEWAS")
+```
+
+## Prepare Data Files
+
+easyEWAS supports `.csv` and `.xlsx` file formats. Ensure your data is in one of these formats.
+
+### Sample data
+
+Users need to prepare a sample file to store sample information, such as sample ID, exposure variables, and covariates.
+
+- The sample ID must be the first column.
+- Each ID should be unique.
+- IDs should be consistent across all files.
+
+```{r sample-data}
+data("sampledata", package = "easyEWAS")
+head(sampledata)
+```
+
+### Methylation data
+
+Users also need a methylation file where each row represents a CpG site and each column represents a sample.
+
+```{r methy-data}
+data("methydata", package = "easyEWAS")
+head(methydata[, 1:6])
+```
+
+## Analysis pipeline
+
+### Library the package
+
+```{r load-package}
+library(easyEWAS)
+```
+
+### Step 1: Initialize the EWAS module
+
+After loading easyEWAS, users can initialize the analysis module with [`initEWAS()`](../reference/initEWAS.html). This creates a folder named `EWASresult` under the working path. If `outpath = "default"`, results are stored in the current working directory.
+
+```{r step-1-init}
+res <- initEWAS(outpath = "default")
+```
+
+When specifying a custom storage path, make sure the path exists.
+
+```{r step-1-init-custom, eval=FALSE}
+res <- initEWAS(outpath = "D:/test")
+```
+
+Note: The function returns an R6 object integrating all information, so assign it to an object such as `res`.
+
+### Step 2: Load the Data Files
+
+Users can upload sample and methylation data in two ways:
+
+- assign data objects in the R environment (`ExpoData`, `MethyData`)
+- read from files (`ExpoPath`, `MethyPath`)
+
+Detailed information is available at [`loadEWAS` documentation](../reference/loadEWAS.html).
+
+```{r step-2-load}
+# Read from environment.
+# Or read from file paths:
+# ExpoPath = "D:/DATA/dat1.csv", MethyPath = "D:/DATA/dat2.csv"
+res <- loadEWAS(
+  input = res,
+  ExpoData = sampledata,
+  MethyData = methydata
+)
+```
+
+`input` should be the `res` generated in Step 1.
+
+### Step 3: Transform variable types
+
+This is optional. Users can transform selected variables in sample data to `factor` or `numeric` via [`transEWAS()`](../reference/transEWAS.html).
+
+```{r step-3-trans}
+res <- transEWAS(input = res, Vars = "cov1", TypeTo = "factor")
+```
+
+### Step 4: Remove batch effects
+
+This is optional. Batch correction is based on ComBat (`sva` package) and requires known batch information in sample metadata.
+
+- `batch`: batch column name
+- `adjustVar`: variable(s) to preserve and avoid overcorrection
+
+The corrected methylation matrix will replace `res$Data$Methy`.
+
+Detailed information is available at [`batchEWAS` documentation](../reference/batchEWAS.html).
+
+```{r step-4-batch}
+res <- batchEWAS(input = res, adjustVar = "var", batch = "batch")
+```
+
+If `plot = TRUE`, prior plots are generated.
+
+```{r step-4-batch-plot, eval=FALSE}
+res <- batchEWAS(input = res, adjustVar = "var", batch = "batch", plot = TRUE)
+```
+
+### Step 5: Perform the EWAS analysis
+
+This is the core step. Users can choose among linear regression, linear mixed-effects, and Cox models.
+
+Detailed information is available at [`startEWAS` documentation](../reference/startEWAS.html).
+
+```{r step-5-start}
+parallel::detectCores() - 1 # Maximum recommended number of cores
+
+res <- startEWAS(
+  input = res,
+  chipType = "EPICV2", # "EPICV1", "450K", "27K", "MSA"
+  model = "lm",        # "lm", "lmer", "cox"
+  expo = "var",        # exposure variable
+  cov = "cov1,cov2",   # covariates
+  adjustP = TRUE,       # adjust p-values (FDR and Bonferroni)
+  random = NULL,        # set only for lmer
+  time = NULL,          # set only for cox
+  status = NULL,        # set only for cox
+  core = 10             # set cores for parallel operations
+)
+```
+
+The results can be viewed in `res$result`.
+
+```{r step-5-result}
+head(res$result)
+```
+
+## Downstream Analysis
+
+### Option 1: EWAS results visualization
+
+Use [`plotEWAS()`](../reference/plotEWAS.html) to generate Manhattan, QQ, and related plots.
+
+- `p`: `"PVAL"`, `"FDR"`, `"Bonfferoni"`
+- `threshold`: significance line for Manhattan plot
+
+```{r option-1-plot}
+res <- plotEWAS(
+  input = res,
+  file = "pdf", # "jpg", "png", "tif", "pdf"
+  p = "PVAL",   # "PVAL", "FDR", "Bonfferoni"
+  threshold = 0.05
+)
+```
+
+### Option 2: Internal validation with bootstrap
+
+Bootstrap is a resampling technique for internal validation and uncertainty estimation.
+
+`bootCI` supports: `"norm"`, `"basic"`, `"stud"`, `"perc"`, `"bca"`.
+
+Users can choose CpGs in two ways.
+
+1) Filter by significance column and cutoff:
+
+```{r option-2-boot}
+res <- bootEWAS(
+  input = res,
+  filterP = "PVAL", # "FDR", "Bonfferoni"
+  cutoff = 0.001,
+  bootCI = "perc",
+  times = 100
+)
+
+head(res$bootres)
+```
+
+2) Specify CpG names directly:
+
+```{r option-2-boot-cpg, eval=FALSE}
+res <- bootEWAS(
+  input = res,
+  CpGs = "cg01444397_BC11,cg08693699_BC21,cg16047471_BC21",
+  bootCI = "perc",
+  times = 100
+)
+```
+
+### Option 3: Enrichment analysis
+
+easyEWAS provides GO/KEGG enrichment based on clusterProfiler.
+
+- `method`: `"GO"` or `"KEGG"`
+- `filterP` + `cutoff`: site/gene selection
+- `ont`: `"BP"`, `"MF"`, `"CC"`, `"ALL"`
+
+Detailed information is available at [`enrichEWAS` documentation](../reference/enrichEWAS.html).
+
+```{r option-3-enrich}
+res <- enrichEWAS(
+  input = res,
+  method = "GO",
+  filterP = "PVAL",      # "PVAL", "FDR", "Bonfferoni"
+  cutoff = 0.01,
+  ont = "BP",            # "BP", "MF", "CC", "ALL"
+  plot = TRUE,
+  plotType = "dot",      # "bar", "dot"
+  plotcolor = "pvalue",  # "pvalue", "p.adjust", "qvalue"
+  showCategory = 10
+)
+
+head(res$enrichres)
+```
+
+### Option 4: DMR analysis
+
+easyEWAS integrates DMRcate for DMR analysis. As in DMP analysis, specify exposure variable, covariates, chip type, and methylation value type.
+
+Detailed information is available at [`dmrEWAS` documentation](../reference/dmrEWAS.html).
+
+```{r option-4-dmr}
+res <- dmrEWAS(
+  input = res,
+  chipType = "EPICV2",
+  what = "Beta",
+  expo = "var",
+  cov = "cov1,cov2",
+  genome = "hg38",
+  lambda = 1000,
+  C = 2,
+  pcutoff = 0.05
+)
+
+head(res$dmrres)
+```
+
+## Reference
+
+1. Hall P (1992). *The Bootstrap and Edgeworth Expansion*. Springer, New York. ISBN 9781461243847.
+2. <https://CRAN.R-project.org/package=CMplot>
+3. Yu G, Wang LG, Han Y, He QY (2012). clusterProfiler: an R package for comparing biological themes among gene clusters. *OMICS* 16(5):284-287. <https://doi.org/10.1089/omi.2011.0118>
+4. Leek JT, Johnson WE, Parker HS, Jaffe AE, Storey JD (2012). The sva package for removing batch effects and other unwanted variation in high-throughput experiments. *Bioinformatics* 28(6):882-883. <https://doi.org/10.1093/bioinformatics/bts034>
+5. Peters TJ, Buckley MJ, Statham AL, Pidsley R, Samaras K, Lord RV, Clark SJ, Molloy PL (2015). De novo identification of differentially methylated regions in the human genome. *Epigenetics & Chromatin* 8:6. <https://doi.org/10.1186/1756-8935-8-6>

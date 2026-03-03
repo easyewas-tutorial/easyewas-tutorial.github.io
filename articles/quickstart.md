@@ -24,25 +24,19 @@ needs chip annotation data. Download and cache it before analysis.
 
 ``` r
 
-downloadAnnotEWAS(chipType = "EPICV2")
+downloadAnnotEWAS(chipType = "EPICV2") # also "EPICV1" or others.
 ```
 
-If you host annotation files on your own server:
 
-``` r
-
-options(
-  easyEWAS.annotation_base_url =
-    "https://your-server/path/to/annotation"
-)
-downloadAnnotEWAS(chipType = "EPICV2")
-```
 
 ## 4. Run a minimal EWAS workflow
 
 ``` r
 
 res <- initEWAS(outpath = "default")
+
+data("sampledata", package = "easyEWAS")
+data("methydata", package = "easyEWAS")
 
 res <- loadEWAS(
   input = res,

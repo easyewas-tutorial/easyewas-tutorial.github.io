@@ -61,516 +61,462 @@
       
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/vignettes/full-pipeline.Rmd" class="external-link"><code>vignettes/full-pipeline.Rmd</code></a></small>
       <div class="d-none name"><code>full-pipeline.Rmd</code></div>
-    </div>
+    <h2 id="introduction">Introduction</h2>
+<p>easyEWAS is a user-friendly R package designed for conducting
+epigenome-wide association studies (EWAS). With easyEWAS, we provide a
+battery of statistical methods to support differential methylation
+position analysis across various scenarios, as well as differential
+methylation region analysis based on the DMRcate method. To facilitate
+result interpretation, we provide comprehensive functional annotation
+and result visualization functionalities. Additionally, bootstrap-based
+internal validation is incorporated to evaluate the robustness of EWAS
+results. easyEWAS is compatible with currently most cited Illumina
+high-density microarray platforms for genome-wide methylation profiling,
+including 27K, 450K, EPIC V1, EPIC V2, and MSA arrays.</p>
+<h2 id="prepare-data-files">Prepare Data Files</h2>
+<p>easyEWAS supports <code>.csv</code> and <code>.xlsx</code> file
+formats. so ensure your data is in one of these formats. The package
+also includes internal sample and methylation datasets for users to
+explore and test its functions.</p>
+<h3 id="sample-data">Sample data</h3>
+<p>Users need to prepare a sample file to store sample information, such
+as sample ID, exposure variables, and covariates.</p>
+<ul>
+<li>The sample ID must be the first column.</li>
+<li>Each ID should be unique.</li>
+<li>IDs should be consistent across all files.</li>
+</ul>
+<!-- -->
 
-    
-    
-<p>This tutorial uses built-in demo data (<code>sampledata</code>,
-<code>methydata</code>) and walks through a complete
-<code>easyEWAS</code> workflow. For each step, it explains:</p>
+<pre><code>data(&quot;sampledata&quot;, package = &quot;easyEWAS&quot;)
+head(sampledata)
+#&gt;   SampleName var cov1     cov2 batch
+#&gt; 1 ZE10000001  76    2 20.96810     1
+#&gt; 2 ZE10000002  66    2 26.78373     1
+#&gt; 3 ZE10000003  71    2 28.26081     1
+#&gt; 4 ZE10000004  81    1 22.54459     1
+#&gt; 5 ZE10000005  70    1 21.66550     1
+#&gt; 6 ZE10000006  68    2 16.94033     1</code></pre>
+<h3 id="methylation-data">Methylation data</h3>
+<p>Users also need a methylation file where each row represents a CpG
+site and each column represents a sample.</p>
+<pre><code>data(&quot;methydata&quot;, package = &quot;easyEWAS&quot;)
+head(methydata[, 1:6])
+#&gt;             probe ZE10000001 ZE10000002 ZE10000003 ZE10000004 ZE10000005
+#&gt; 1 cg01444397_BC11 0.04768038 0.02783589 0.02852848 0.06711713 0.04478172
+#&gt; 2 cg12110931_TC11 0.43900591 0.43166163 0.51290795 0.45075799 0.59972834
+#&gt; 3 cg12258811_TC21 0.41950433 0.47744150 0.52750836 0.53600388 0.64258103
+#&gt; 4 cg08764927_TC21 0.82080027 0.82292072 0.88725030 0.87222326 0.91267532
+#&gt; 5 cg25514503_TC21 0.94965507 0.95133812 0.95787150 0.96158814 0.96021148
+#&gt; 6 cg24454741_TC21 0.88100024 0.89587378 0.90661704 0.88505037 0.86547789</code></pre>
+<h2 id="analysis-pipeline">Analysis pipeline</h2>
+<h3 id="library-the-package">Library the package</h3>
+<pre><code>library(easyEWAS)
+#&gt; 
+#&gt; Welcome to easyEWAS 1.1.0!
+#&gt; =============================
+#&gt; Flexible and user-friendly tools for Epigenome-Wide Association Studies.
+#&gt; 
+#&gt; Authors: Yuting Wang &amp; Xu Gao (Corresponding author)
+#&gt; Documentation: https://easyewas-tutorial.github.io/
+#&gt; Citation:https://doi.org/10.1093/bioadv/vbaf026</code></pre>
+<h3 id="step-1-initialize-the-ewas-module">Step 1: Initialize the EWAS
+module</h3>
+<p>After loading easyEWAS, users can initialize the analysis module with
+<a href="../reference/initEWAS.html"><code>initEWAS()</code></a>. This
+creates a folder named <code>EWASresult</code> under the working path.
+If <code>outpath = "default"</code>, results are stored in the current
+working directory.</p>
+<pre><code>res &lt;- initEWAS(outpath = &quot;default&quot;)
+#&gt; EWAS module has been successfully initialized.
+#&gt; Results will be saved to: /Users/yuting/Documents/EWASresult
+#&gt; Initialization time: 2026-03-03 12:12:56.282611
+#&gt; 0.002 sec elapsed</code></pre>
+<p>When specifying a custom storage path, make sure the path exists.</p>
+<pre><code>res &lt;- initEWAS(outpath = &quot;D:/test&quot;)</code></pre>
+<p>Note: The function returns an R6 object integrating all information,
+so assign it to an object such as <code>res</code>.</p>
+<h3 id="step-2-load-the-data-files">Step 2: Load the Data Files</h3>
+<p>Users can upload sample and methylation data in two ways:</p>
 <ul>
-<li>key parameters</li>
-<li>required input</li>
-<li>returned object in memory</li>
-<li>files written to disk</li>
+<li>assign data objects in the R environment (<code>ExpoData</code>,
+<code>MethyData</code>)</li>
+<li>read from files (<code>ExpoPath</code>, <code>MethyPath</code>)</li>
 </ul>
-<div class="section level2">
-<h2 id="workflow-map">Workflow map<a class="anchor" aria-label="anchor" href="#workflow-map"></a>
-</h2>
-<table class="table">
-<colgroup>
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-</colgroup>
-<thead><tr class="header">
-<th>Step</th>
-<th>Function</th>
-<th>Main goal</th>
-<th>In-memory output</th>
-<th>File output</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>0</td>
-<td><code><a href="../reference/downloadAnnotEWAS.html">downloadAnnotEWAS()</a></code></td>
-<td>Cache chip annotation</td>
-<td>(cache only)</td>
-<td>annotation <code>.rds</code> under user cache</td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td><code><a href="../reference/initEWAS.html">initEWAS()</a></code></td>
-<td>Initialize project object and output folder</td>
-<td>
-<code>res$outpath</code>, empty <code>res$Data</code>
-</td>
-<td>create <code>EWASresult/</code>
-</td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td><code><a href="../reference/loadEWAS.html">loadEWAS()</a></code></td>
-<td>Load sample + methylation matrices</td>
-<td>
-<code>res$Data$Expo</code>, <code>res$Data$Methy</code>
-</td>
-<td>none</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td><code><a href="../reference/transEWAS.html">transEWAS()</a></code></td>
-<td>Convert variable types</td>
-<td>updated <code>res$Data$Expo</code>
-</td>
-<td>none</td>
-</tr>
-<tr class="odd">
-<td>4</td>
-<td><code><a href="../reference/batchEWAS.html">batchEWAS()</a></code></td>
-<td>Remove batch effects with ComBat</td>
-<td>updated <code>res$Data$Methy</code>
-</td>
-<td>
-<code>combat_plots.pdf</code> (if <code>plot = TRUE</code>)</td>
-</tr>
-<tr class="even">
-<td>5</td>
-<td><code><a href="../reference/startEWAS.html">startEWAS()</a></code></td>
-<td>Run EWAS model and annotation</td>
-<td>
-<code>res$result</code>, <code>res$model</code>,
-<code>res$formula</code>
-</td>
-<td>
-<code>ewasresult.csv</code> (or custom)</td>
-</tr>
-<tr class="odd">
-<td>6</td>
-<td><code><a href="../reference/plotEWAS.html">plotEWAS()</a></code></td>
-<td>Manhattan / QQ / circular plots</td>
-<td><code>res$CMplot</code></td>
-<td>image files under <code>res$outpath</code>
-</td>
-</tr>
-<tr class="even">
-<td>7</td>
-<td><code><a href="../reference/bootEWAS.html">bootEWAS()</a></code></td>
-<td>Bootstrap internal validation</td>
-<td><code>res$bootres</code></td>
-<td>
-<code>bootresult.csv</code> (or custom)</td>
-</tr>
-<tr class="odd">
-<td>8</td>
-<td><code><a href="../reference/enrichEWAS.html">enrichEWAS()</a></code></td>
-<td>GO/KEGG enrichment</td>
-<td><code>res$enrichres</code></td>
-<td>
-<code>enrichresult.csv</code> + optional PDF</td>
-</tr>
-<tr class="even">
-<td>9</td>
-<td><code><a href="../reference/dmrEWAS.html">dmrEWAS()</a></code></td>
-<td>DMR detection (optional)</td>
-<td><code>res$dmrres</code></td>
-<td>
-<code>DMRresult.csv</code> (or custom)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="setup-and-annotation-cache">0. Setup and annotation cache<a class="anchor" aria-label="anchor" href="#setup-and-annotation-cache"></a>
-</h2>
-<p>Key parameters:</p>
+<p>Detailed information is available at <a
+href="../reference/loadEWAS.html"><code>loadEWAS</code>
+documentation</a>.</p>
+<pre><code># Read from environment.
+# Or read from file paths:
+# ExpoPath = &quot;D:/DATA/dat1.csv&quot;, MethyPath = &quot;D:/DATA/dat2.csv&quot;
+res &lt;- loadEWAS(
+  input = res,
+  ExpoData = sampledata,
+  MethyData = methydata
+)
+#&gt; All data files have been successfully loaded.
+#&gt; Timestamp: 2026-03-03 12:12:56.286563
+#&gt; 0.001 sec elapsed</code></pre>
+<p><code>input</code> should be the <code>res</code> generated in Step
+1.</p>
+<h3 id="step-3-transform-variable-types">Step 3: Transform variable
+types</h3>
+<p>This is optional. Users can transform selected variables in sample
+data to <code>factor</code> or <code>numeric</code> via <a
+href="../reference/transEWAS.html"><code>transEWAS()</code></a>.</p>
+<pre><code>res &lt;- transEWAS(input = res, Vars = &quot;cov1&quot;, TypeTo = &quot;factor&quot;)
+#&gt; Variable type conversion completed successfully.
+#&gt; Converted variables: cov1
+#&gt; Target type: factor
+#&gt; Timestamp: 2026-03-03 12:12:56.288697
+#&gt; 0.01 sec elapsed</code></pre>
+<h3 id="step-4-remove-batch-effects">Step 4: Remove batch effects</h3>
+<p>This is optional. Batch correction is based on ComBat
+(<code>sva</code> package) and requires known batch information in
+sample metadata.Batch effect correction is based on the ComBat function
+from the <code>sva</code> package. The sample data provided by the user
+must include known batch information. Before correcting for batch
+effects, the user can specify the name of the batch in the
+<code>batch</code> parameter, as well as the names of the variates of
+interest and other covariates besides batch in the
+<code>adjustVarparameter</code> to avoid overcorrection.</p>
+<p>The corrected methylation data will replace
+<code>res$Data$Methy</code>.</p>
+<p>Detailed information is available at <a
+href="../reference/batchEWAS.html"><code>batchEWAS</code>
+documentation</a>.</p>
+<pre><code>res &lt;- batchEWAS(input = res, adjustVar = &quot;var&quot;, batch = &quot;batch&quot;)
+#&gt; Starting batch effect adjustment using ComBat. This may take some time...
+#&gt; Found2batches
+#&gt; Adjusting for1covariate(s) or covariate level(s)
+#&gt; Standardizing Data across genes
+#&gt; Fitting L/S model and finding priors
+#&gt; Finding parametric adjustments
+#&gt; Adjusting the Data
+#&gt; Batch effect adjustment completed successfully.
+#&gt; Adjusted methylation data is stored in: input$Data$Methy
+#&gt; Timestamp: 2026-03-03 12:12:56.946095
+#&gt; 0.646 sec elapsed</code></pre>
+<p>If <code>plot = TRUE</code>, prior plots are generated.</p>
+<pre><code>res &lt;- batchEWAS(input = res, adjustVar = &quot;var&quot;, batch = &quot;batch&quot;, plot = TRUE)</code></pre>
+<h3 id="step-5-perform-the-ewas-analysis">Step 5: Perform the EWAS
+analysis</h3>
+<p>This is the core step. The user can select models based on the
+analysis requirements, including linear regression models, linear mixed
+effects models, and Cox proportional risk models.The results can be
+exported to a file in working directory.</p>
+<p>Detailed information is available at <a
+href="../reference/startEWAS.html"><code>startEWAS</code>
+documentation</a>.</p>
+<pre><code>parallel::detectCores() - 1 # Maximum recommended number of cores
+#&gt; [1] 9
+
+res &lt;- startEWAS(
+  input = res,
+  chipType = &quot;EPICV2&quot;, # &quot;EPICV1&quot;, &quot;450K&quot;, &quot;27K&quot;, &quot;MSA&quot;
+  model = &quot;lm&quot;,        # &quot;lm&quot;, &quot;lmer&quot;, &quot;cox&quot;
+  expo = &quot;var&quot;,        # exposure variable
+  cov = &quot;cov1,cov2&quot;,   # covariates
+  adjustP = TRUE,       # adjust p-values (FDR and Bonferroni)
+  random = NULL,        # set only for lmer
+  time = NULL,          # set only for cox
+  status = NULL,        # set only for cox
+  core = 4             # set cores for parallel operations
+)
+#&gt; Starting EWAS data preprocessing ...
+#&gt; EWAS data preprocessing completed in 0 seconds.
+#&gt; Starting parallel computation setup ...
+#&gt; Parallel setup completed in 4.28 seconds.
+#&gt; Running parallel EWAS model fitting ...
+#&gt; Parallel EWAS model fitting completed in 0.25 seconds.
+#&gt; Multiple testing correction completed!
+#&gt; Start CpG sites annotation ...
+#&gt; Using annotation for chip type: EPICV2 (Genome: hg38 (GRCh38))
+#&gt; EWAS analysis has been completed! You can find results in /Users/yuting/Documents/EWASresult.
+#&gt; 2026-03-03 12:13:02.996542
+#&gt; 6.043 sec elapsed</code></pre>
+<p>The results can be viewed in <code>res$result</code>.For linear
+regression and linear mixed-effects models, when the exposure variable
+is continuous, the output includes the coefficient (per unit, per IQR,
+per SD), standard error, significance P-value, adjusted P-value, and
+annotation for each site. For categorical variables, coefficients are
+provided for each class relative to the reference group. In Cox
+proportional hazards models, hazard ratios (HR) and confidence intervals
+are also included.</p>
+<pre><code>head(res$result)
+#&gt;             probe          BETA    BETA_perSD   BETA_perIQR           SE
+#&gt; 1 cg01444397_BC11  5.724133e-04  5.345447e-03  0.0087293025 1.594601e-04
+#&gt; 2 cg12110931_TC11  2.012009e-03  1.878903e-02  0.0306831439 6.058078e-04
+#&gt; 3 cg12258811_TC21  1.917825e-04  1.790949e-03  0.0029246826 5.173171e-04
+#&gt; 4 cg08764927_TC21 -3.726331e-05 -3.479812e-04 -0.0005682655 4.552721e-04
+#&gt; 5 cg25514503_TC21  6.708728e-06  6.264905e-05  0.0001023081 8.123277e-05
+#&gt; 6 cg24454741_TC21 -6.095697e-05 -5.692430e-04 -0.0009295938 1.282312e-04
+#&gt;       SE_perSD   SE_perIQR         PVAL       FDR Bonfferoni chr     pos
+#&gt; 1 0.0014891086 0.002431767 0.0005237102 0.1059711   0.645211   1 7784390
+#&gt; 2 0.0056572995 0.009238568 0.0012686133 0.1214434   1.000000   1 7784577
+#&gt; 3 0.0048309345 0.007889085 0.7116590121 0.9001683   1.000000   1 7784675
+#&gt; 4 0.0042515312 0.006942899 0.9349376448 0.9720196   1.000000   1 7784835
+#&gt; 5 0.0007585874 0.001238800 0.9343523148 0.9720196   1.000000   1 7785010
+#&gt; 6 0.0011974795 0.001955526 0.6356047918 0.8722169   1.000000   1 7785177
+#&gt;   relation_to_island
+#&gt; 1             Island
+#&gt; 2             Island
+#&gt; 3             Island
+#&gt; 4             Island
+#&gt; 5             Island
+#&gt; 6              Shore
+#&gt;                                                                    gene
+#&gt; 1                          PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3
+#&gt; 2                                                                      
+#&gt; 3 PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3
+#&gt; 4 PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3;PER3
+#&gt; 5                                                                      
+#&gt; 6                                                                      
+#&gt;                                                                              location
+#&gt; 1                              5UTR;exon_1;5UTR;exon_1;5UTR;exon_1;5UTR;exon_1;TSS200
+#&gt; 2                                                                                    
+#&gt; 3 5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2
+#&gt; 4 5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2;5UTR;exon_2
+#&gt; 5                                                                                    
+#&gt; 6</code></pre>
+<h2 id="downstream-analysis">Downstream Analysis</h2>
+<h3 id="option-1-ewas-results-visualization">Option 1: EWAS results
+visualization</h3>
+<p>Use <a href="../reference/plotEWAS.html"><code>plotEWAS()</code></a>
+to generate Manhattan, QQ, and related plots.</p>
 <ul>
-<li>
-<code>chipType</code>: one of <code>"27K"</code>,
-<code>"450K"</code>, <code>"EPICV1"</code>, <code>"EPICV2"</code>,
-<code>"MSA"</code>
-</li>
+<li><code>p</code>: <code>"PVAL"</code>, <code>"FDR"</code>,
+<code>"Bonfferoni"</code></li>
+<li><code>threshold</code>: significance line for Manhattan plot</li>
 </ul>
-<p>Input:</p>
+<p>There are many other parameters for users to customize their plots.
+Detailed information can be found in Reference page.</p>
+<!-- -->
+
+<pre><code>res &lt;- plotEWAS(
+  input = res,
+  file = &quot;pdf&quot;, # &quot;jpg&quot;, &quot;png&quot;, &quot;tif&quot;, &quot;pdf&quot;
+  p = &quot;PVAL&quot;,   # &quot;PVAL&quot;, &quot;FDR&quot;, &quot;Bonfferoni&quot;
+  threshold = 0.05
+)
+#&gt; No file name provided. Output images will use default names from CMplot.
+#&gt; Starting EWAS result visualization using CMplot...
+#&gt; EWAS visualization completed successfully.
+#&gt; Plots saved to: /Users/yuting/Documents/EWASresult.
+#&gt; Timestamp: 2026-03-03 12:13:03.095174
+#&gt; 0.093 sec elapsed</code></pre>
+<h3 id="option-2-internal-validation-with-bootstrap">Option 2: Internal
+validation with bootstrap</h3>
+<p>Bootstrap is a statistical resampling technique used for internal
+validation and estimation of uncertainty in statistical models. The
+parameter <code>bootCI</code> refers to the type of confidence interval
+calculation methods, including “norm”, “basic”, “stud”, “perc” (the
+default), and “bca”. Users can select CpG sites to validate in two
+ways.</p>
+<ol type="1">
+<li>Filter by significance column and cutoff:</li>
+</ol>
+<!-- -->
+
+<pre><code>res &lt;- bootEWAS(
+  input = res,
+  filterP = &quot;PVAL&quot;, # &quot;FDR&quot;, &quot;Bonfferoni&quot;
+  cutoff = 0.001,
+  bootCI = &quot;perc&quot;,
+  times = 100
+)
+#&gt; Starting bootstrap-based internal validation...
+#&gt; 10 CpG sites selected by PVAL &lt; 0.001
+#&gt; 10 CpG sites selected for bootstrap analysis.
+#&gt; Bootstrap confidence interval method: perc.
+#&gt; Bootstrap analysis for cg01444397_BC11...
+#&gt; Bootstrap analysis for cg26269881_BC21...
+#&gt; Bootstrap analysis for cg08693699_BC21...
+#&gt; Bootstrap analysis for cg14151354_BC21...
+#&gt; Bootstrap analysis for cg13515269_TC21...
+#&gt; Bootstrap analysis for cg16047471_BC21...
+#&gt; Bootstrap analysis for cg00200653_TC11...
+#&gt; Bootstrap analysis for cg04162685_BC21...
+#&gt; Bootstrap analysis for cg24867447_BC21...
+#&gt; Bootstrap analysis for cg25069388_BC21...
+#&gt; Bootstrap for internal validation has been completed!
+#&gt; You can find results in /Users/yuting/Documents/EWASresult.
+#&gt; 2026-03-03 12:13:03.41437
+#&gt; 0.317 sec elapsed
+
+head(res$bootres)
+#&gt; # A tibble: 6 × 4
+#&gt;   probe            original  lower_CI  upper_CI
+#&gt;   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+#&gt; 1 cg01444397_BC11  0.000572  0.000130  0.000977
+#&gt; 2 cg26269881_BC21 -0.00232  -0.00380  -0.000909
+#&gt; 3 cg08693699_BC21 -0.00113  -0.00168  -0.000397
+#&gt; 4 cg14151354_BC21 -0.000746 -0.00121  -0.000313
+#&gt; 5 cg13515269_TC21 -0.00135  -0.00224  -0.000679
+#&gt; 6 cg16047471_BC21 -0.00183  -0.00279  -0.000805</code></pre>
+<ol type="1">
+<li>Specify CpG names directly:</li>
+</ol>
+<!-- -->
+
+<pre><code>res &lt;- bootEWAS(
+  input = res,
+  CpGs = &quot;cg01444397_BC11,cg08693699_BC21,cg16047471_BC21&quot;,
+  bootCI = &quot;perc&quot;,
+  times = 100
+)</code></pre>
+<h3 id="option-3-enrichment-analysis">Option 3: Enrichment analysis</h3>
+<p>easyEWAS provides GO/KEGG enrichment based on clusterProfiler.</p>
 <ul>
-<li>none</li>
+<li><code>method</code>: <code>"GO"</code> or <code>"KEGG"</code></li>
+<li><code>filterP</code> + <code>cutoff</code>: site selection</li>
+<li><code>ont</code>: <code>"BP"</code>, <code>"MF"</code>,
+<code>"CC"</code>, <code>"ALL"</code>, only available when choosing
+<code>GO</code> enrichment method.</li>
 </ul>
-<p>Output:</p>
-<ul>
-<li>annotation file cached locally (used later by
-<code><a href="../reference/startEWAS.html">startEWAS()</a></code>)</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ytwangZero.github.io/easyEWAS/">easyEWAS</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/downloadAnnotEWAS.html">downloadAnnotEWAS</a></span><span class="op">(</span>chipType <span class="op">=</span> <span class="st">"EPICV2"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="initialize-analysis-object">1. Initialize analysis object<a class="anchor" aria-label="anchor" href="#initialize-analysis-object"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>outpath = "default"</code>: create <code>EWASresult/</code>
-under current working directory</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>none</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res</code> (R6 object), with
-<code>res$outpath</code>
-</li>
-<li>on disk: <code>&lt;working_directory&gt;/EWASresult/</code>
-</li>
-</ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span>
-<span><span class="va">res</span><span class="op">$</span><span class="va">outpath</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="load-demo-data">2. Load demo data<a class="anchor" aria-label="anchor" href="#load-demo-data"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li><code>ExpoData = sampledata</code></li>
-<li><code>MethyData = methydata</code></li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>
-<code>sampledata</code>: sample-level metadata; first column must be
-sample IDs</li>
-<li>
-<code>methydata</code>: CpG-by-sample matrix; first column must be
-probe IDs</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res$Data$Expo</code>,
-<code>res$Data$Methy</code>
-</li>
-<li>on disk: none</li>
-</ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadEWAS.html">loadEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  ExpoData <span class="op">=</span> <span class="va">sampledata</span>,</span>
-<span>  MethyData <span class="op">=</span> <span class="va">methydata</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">Expo</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">Data</span><span class="op">$</span><span class="va">Methy</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="convert-variable-types">3. Convert variable types<a class="anchor" aria-label="anchor" href="#convert-variable-types"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>Vars</code>: comma-separated variable names in
-<code>res$Data$Expo</code>
-</li>
-<li>
-<code>TypeTo</code>: <code>"factor"</code> or
-<code>"numeric"</code>
-</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>
-<code>res$Data$Expo</code> from Step 2</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: selected columns updated in
-<code>res$Data$Expo</code>
-</li>
-<li>on disk: none</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transEWAS.html">transEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  Vars <span class="op">=</span> <span class="st">"cov1,var"</span>,</span>
-<span>  TypeTo <span class="op">=</span> <span class="st">"factor"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="batch-effect-adjustment">4. Batch effect adjustment<a class="anchor" aria-label="anchor" href="#batch-effect-adjustment"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>batch</code>: batch column name in sample metadata</li>
-<li>
-<code>adjustVar</code>: covariates to preserve during ComBat</li>
-<li>
-<code>plot = TRUE</code>: save prior diagnostic plot</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>
-<code>res$Data$Methy</code> and <code>res$Data$Expo</code>
-</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: corrected methylation matrix in
-<code>res$Data$Methy</code>
-</li>
-<li>on disk: <code>combat_plots.pdf</code> (when
-<code>plot = TRUE</code>)</li>
-</ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/batchEWAS.html">batchEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  adjustVar <span class="op">=</span> <span class="st">"cov1,cov2"</span>,</span>
-<span>  batch <span class="op">=</span> <span class="st">"batch"</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  par.prior <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  mean.only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ref.batch <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="run-ewas">5. Run EWAS<a class="anchor" aria-label="anchor" href="#run-ewas"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>model</code>: <code>"lm"</code>, <code>"lmer"</code>, or
-<code>"cox"</code>
-</li>
-<li>
-<code>expo</code>: exposure variable</li>
-<li>
-<code>cov</code>: comma-separated covariates</li>
-<li>
-<code>chipType</code>: annotation platform</li>
-<li>
-<code>filename</code>: output CSV name (<code>"default"</code> -&gt;
-<code>ewasresult.csv</code>)</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>corrected methylation matrix + sample metadata in
-<code>res</code>
-</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res$result</code>, <code>res$model</code>,
-<code>res$formula</code>, <code>res$covdata</code>
-</li>
-<li>on disk: <code>&lt;outpath&gt;/ewasresult.csv</code> (or
-<code>&lt;filename&gt;.csv</code>)</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/startEWAS.html">startEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"ewas_lm"</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"lm"</span>,</span>
-<span>  expo <span class="op">=</span> <span class="st">"var"</span>,</span>
-<span>  cov <span class="op">=</span> <span class="st">"cov1,cov2"</span>,</span>
-<span>  chipType <span class="op">=</span> <span class="st">"EPICV2"</span>,</span>
-<span>  adjustP <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  core <span class="op">=</span> <span class="st">"default"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="plot-ewas-results">6. Plot EWAS results<a class="anchor" aria-label="anchor" href="#plot-ewas-results"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>p</code>: p-value column from <code>res$result</code> (for
-example <code>"PVAL"</code> or <code>"FDR"</code>)</li>
-<li>
-<code>plot.type</code>: <code>"m"</code> (Manhattan),
-<code>"q"</code> (QQ), <code>"c"</code> (circular), <code>"d"</code>
-(density)</li>
-<li>
-<code>file</code> and <code>file.name</code>: image format and
-prefix</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>
-<code>res$result</code> with annotation columns (<code>chr</code>,
-<code>pos</code>)</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res$CMplot</code>
-</li>
-<li>on disk: plot files under <code>res$outpath</code>
-</li>
-</ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotEWAS.html">plotEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  p <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  plot.type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m"</span>, <span class="st">"q"</span><span class="op">)</span>,</span>
-<span>  file <span class="op">=</span> <span class="st">"jpg"</span>,</span>
-<span>  file.name <span class="op">=</span> <span class="st">"EWAS_plot"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="bootstrap-internal-validation">7. Bootstrap internal validation<a class="anchor" aria-label="anchor" href="#bootstrap-internal-validation"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>filterP</code>: significance column used to select CpGs</li>
-<li>
-<code>cutoff</code>: threshold for CpG selection</li>
-<li>
-<code>times</code>: bootstrap iterations</li>
-<li>
-<code>bootCI</code>: confidence interval method (<code>"perc"</code>
-commonly used)</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>
-<code>res$result</code>, plus model context in <code>res</code>
-(<code>res$model</code>, <code>res$formula</code>)</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res$bootres</code>
-</li>
-<li>on disk: <code>&lt;outpath&gt;/bootresult.csv</code> (or custom
-filename)</li>
-</ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bootEWAS.html">bootEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  filterP <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  cutoff <span class="op">=</span> <span class="fl">0.001</span>,</span>
-<span>  times <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  bootCI <span class="op">=</span> <span class="st">"perc"</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"boot_lm"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="enrichment-analysis">8. Enrichment analysis<a class="anchor" aria-label="anchor" href="#enrichment-analysis"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>method</code>: <code>"GO"</code> or <code>"KEGG"</code>
-</li>
-<li>
-<code>filterP</code> + <code>cutoff</code>: select significant genes
-from EWAS result</li>
-<li>
-<code>plot</code>, <code>plotType</code>: whether to save dot/bar
-enrichment figure</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>gene symbols from EWAS result column <code>gene</code>
-</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res$enrichres</code>
-</li>
-<li>on disk: enrichment CSV + optional PDF plot</li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichEWAS.html">enrichEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"GO"</span>,</span>
-<span>  ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
-<span>  filterP <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  cutoff <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
-<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  plotType <span class="op">=</span> <span class="st">"dot"</span>,</span>
-<span>  plotcolor <span class="op">=</span> <span class="st">"p.adjust"</span>,</span>
-<span>  showCategory <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"go_enrich"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="dmr-analysis-optional">9. DMR analysis (optional)<a class="anchor" aria-label="anchor" href="#dmr-analysis-optional"></a>
-</h2>
-<p>Key parameters:</p>
-<ul>
-<li>
-<code>chipType</code> and <code>genome</code> must match platform
-(for EPICV2 use <code>hg38</code>)</li>
-<li>
-<code>epicv2Filter</code>: EPICv2 replicate probe handling
-strategy</li>
-<li>
-<code>lambda</code>, <code>C</code>, <code>min.cpgs</code>: region
-calling sensitivity</li>
-</ul>
-<p>Input:</p>
-<ul>
-<li>
-<code>res$Data$Methy</code> + <code>res$Data$Expo</code>
-</li>
-</ul>
-<p>Output:</p>
-<ul>
-<li>in memory: <code>res$dmrres</code>
-</li>
-<li>on disk: <code>&lt;outpath&gt;/DMRresult.csv</code> (or custom
-filename)</li>
-</ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"DMRcate"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dmrEWAS.html">dmrEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  chipType <span class="op">=</span> <span class="st">"EPICV2"</span>,</span>
-<span>  what <span class="op">=</span> <span class="st">"Beta"</span>,</span>
-<span>  epicv2Filter <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  expo <span class="op">=</span> <span class="st">"var"</span>,</span>
-<span>  cov <span class="op">=</span> <span class="st">"cov1,cov2"</span>,</span>
-<span>  genome <span class="op">=</span> <span class="st">"hg38"</span>,</span>
-<span>  fdrCPG <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  pcutoff <span class="op">=</span> <span class="st">"fdr"</span>,</span>
-<span>  lambda <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  C <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  min.cpgs <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"dmr_result"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="final-output-checklist">Final output checklist<a class="anchor" aria-label="anchor" href="#final-output-checklist"></a>
-</h2>
-<p>After this pipeline, check these common outputs in
-<code>res$outpath</code>:</p>
-<ul>
-<li>
-<code>ewas_lm.csv</code> (or <code>ewasresult.csv</code>)</li>
-<li>
-<code>combat_plots.pdf</code> (if batch step with
-<code>plot = TRUE</code>)</li>
-<li>EWAS plot image files from <code><a href="../reference/plotEWAS.html">plotEWAS()</a></code>
-</li>
-<li>
-<code>boot_lm.csv</code> (or <code>bootresult.csv</code>)</li>
-<li>
-<code>go_enrich.csv</code> and <code>go_enrich.pdf</code> (if
-enrichment plot enabled)</li>
-<li>
-<code>dmr_result.csv</code> (if DMR analysis is run)</li>
-</ul>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+<p>Additionally, the function can visualize the enrichment analysis
+results, including both dotplot and barplot. The colors in the plot can
+be based on the values of <code>pvalue</code>, <code>p.adjust</code>, or
+<code>qvalue</code>, with <code>pvalue</code> being the default.</p>
+<p>Detailed information is available at <a
+href="../reference/enrichEWAS.html"><code>enrichEWAS</code>
+documentation</a>.</p>
+<pre><code>res &lt;- enrichEWAS(
+  input = res,
+  method = &quot;GO&quot;,
+  filterP = &quot;PVAL&quot;,      # &quot;PVAL&quot;, &quot;FDR&quot;, &quot;Bonfferoni&quot;
+  cutoff = 0.01,
+  ont = &quot;BP&quot;,            # &quot;BP&quot;, &quot;MF&quot;, &quot;CC&quot;, &quot;ALL&quot;
+  plot = TRUE,
+  plotType = &quot;dot&quot;,      # &quot;bar&quot;, &quot;dot&quot;
+  plotcolor = &quot;pvalue&quot;,  # &quot;pvalue&quot;, &quot;p.adjust&quot;, &quot;qvalue&quot;
+  showCategory = 10
+)
+#&gt; 
+#&gt; Converting gene symbols to Entrez IDs...
+#&gt; Gene symbol conversion completed: 5 gene(s) mapped.
+#&gt; Starting GO enrichment analysis using clusterProfiler ...
+#&gt; Visualizing enrichment results as a dot plot ...
+#&gt; Plot saved to: /Users/yuting/Documents/EWASresult/enrichdot.pdf
+#&gt; Enrichment analysis has been completed! 
+#&gt; You can find results in /Users/yuting/Documents/EWASresult.
+#&gt; 2026-03-03 12:13:14.011387
+#&gt; 10.581 sec elapsed
+
+head(res$enrichres)
+#&gt;                    ID
+#&gt; GO:0048511 GO:0048511
+#&gt; GO:0032922 GO:0032922
+#&gt; GO:0032434 GO:0032434
+#&gt; GO:0010508 GO:0010508
+#&gt; GO:2000058 GO:2000058
+#&gt; GO:0061136 GO:0061136
+#&gt;                                                                        Description
+#&gt; GO:0048511                                                        rhythmic process
+#&gt; GO:0032922                                 circadian regulation of gene expression
+#&gt; GO:0032434 regulation of proteasomal ubiquitin-dependent protein catabolic process
+#&gt; GO:0010508                                        positive regulation of autophagy
+#&gt; GO:2000058             regulation of ubiquitin-dependent protein catabolic process
+#&gt; GO:0061136                     regulation of proteasomal protein catabolic process
+#&gt;            GeneRatio   BgRatio  RichFactor FoldEnrichment    zScore
+#&gt; GO:0048511       3/5 302/18860 0.009933775       37.47020 10.404161
+#&gt; GO:0032922       2/5  67/18860 0.029850746      112.59701 14.901260
+#&gt; GO:0032434       2/5 139/18860 0.014388489       54.27338 10.265597
+#&gt; GO:0010508       2/5 176/18860 0.011363636       42.86364  9.086349
+#&gt; GO:2000058       2/5 178/18860 0.011235955       42.38202  9.033189
+#&gt; GO:0061136       2/5 209/18860 0.009569378       36.09569  8.308201
+#&gt;                  pvalue   p.adjust      qvalue               geneID Count
+#&gt; GO:0048511 3.969643e-05 0.01171045 0.003927857 PER3/BHLHE41/CSNK2A1     3
+#&gt; GO:0032922 1.234701e-04 0.01821184 0.006108521         PER3/BHLHE41     2
+#&gt; GO:0032434 5.315103e-04 0.04749564 0.015930740      CSNK1A1/CSNK2A1     2
+#&gt; GO:0010508 8.500749e-04 0.04749564 0.015930740      CSNK1A1/CSNK2A1     2
+#&gt; GO:2000058 8.693751e-04 0.04749564 0.015930740      CSNK1A1/CSNK2A1     2
+#&gt; GO:0061136 1.195607e-03 0.04749564 0.015930740      CSNK1A1/CSNK2A1     2</code></pre>
+<h3 id="option-4-dmr-analysis">Option 4: DMR analysis</h3>
+<p>easyEWAS integrates <code>DMRcate</code> package for DMR analysis. As
+in DMP analysis, specify exposure variable, covariates, chip type, and
+methylation value type (β-values or M-values). It is recommended to use
+the default settings for parameters such as <code>lambda</code>,
+<code>C</code>, <code>fdrCPG</code>, <code>pcutoff</code>, and
+<code>min.cpgs</code> for DMR selection.</p>
+<p>Detailed information is available at <a
+href="../reference/dmrEWAS.html"><code>dmrEWAS</code>
+documentation</a>.</p>
+<pre><code>res &lt;- dmrEWAS(
+  input = res,
+  chipType = &quot;EPICV2&quot;,
+  what = &quot;Beta&quot;,
+  expo = &quot;var&quot;,
+  cov = &quot;cov1,cov2&quot;,
+  genome = &quot;hg38&quot;,
+  lambda = 1000,
+  C = 2,
+  pcutoff = 0.05
+)
+#&gt; Registered S3 methods overwritten by &#39;readr&#39;:
+#&gt;   method                    from 
+#&gt;   as.data.frame.spec_tbl_df vroom
+#&gt;   as_tibble.spec_tbl_df     vroom
+#&gt;   format.col_spec           vroom
+#&gt;   print.col_spec            vroom
+#&gt;   print.collector           vroom
+#&gt;   print.date_names          vroom
+#&gt;   print.locale              vroom
+#&gt;   str.col_spec              vroom
+#&gt; Setting options(&#39;download.file.method.GEOquery&#39;=&#39;auto&#39;)
+#&gt; Setting options(&#39;GEOquery.inmemory.gpl&#39;=FALSE)
+#&gt; Starting the differentially methylated region analysis. Please be patient...
+#&gt; EPICv2 detected. Filtering position replicates using method: &#39;mean&#39;...
+#&gt; 1216 CpGs used for DMR analysis.
+#&gt; 12 DMRs detected.
+#&gt; DMR result has been saved to: /Users/yuting/Documents/EWASresult/DMRresult.csv
+#&gt; DMR analysis completed successfully.
+#&gt; Timestamp: 2026-03-03 12:13:47.864385
+#&gt; 31.217 sec elapsed
+
+head(res$dmrres)
+#&gt;   seqnames     start       end width strand no.cpgs min_smoothed_fdr
+#&gt; 1    chr12  26121435  26121868   434      *       3     0.0006926403
+#&gt; 2     chr1   7826573   7827921  1349      *      10     0.0053198587
+#&gt; 3     chr1   7784390   7784835   446      *       4     0.0053198587
+#&gt; 4     chr3   4981365   4981709   345      *       3     0.0054574766
+#&gt; 5     chr2 100924866 100925130   265      *       5     0.0081198870
+#&gt; 6    chr15  60591026  60591370   345      *       2     0.0081198870
+#&gt;       Stouffer       HMFDR       Fisher      maxdiff      meandiff
+#&gt; 1 2.827015e-04 0.002443061 0.0001300913 -0.001834445 -0.0011539964
+#&gt; 2 6.166338e-06 0.039505450 0.0001300913 -0.002527727 -0.0012950516
+#&gt; 3 4.259913e-03 0.003212979 0.0007271626  0.002012009  0.0006847355
+#&gt; 4 3.654183e-04 0.003212979 0.0007015946 -0.002322104 -0.0015218217
+#&gt; 5 3.580945e-04 0.016418020 0.0007015946 -0.002072670 -0.0013957993
+#&gt; 6 1.749110e-03 0.003092856 0.0013320402 -0.001368543 -0.0006471749
+#&gt;   overlapping.genes
+#&gt; 1           BHLHE41
+#&gt; 2    PER3, Z98884.1
+#&gt; 3              PER3
+#&gt; 4           BHLHE40
+#&gt; 5             NPAS2
+#&gt; 6    RORA-AS1, RORA</code></pre>
+<h2 id="reference">Reference</h2>
+<ol type="1">
+<li>Hall P (1992). <em>The Bootstrap and Edgeworth Expansion</em>.
+Springer, New York. ISBN 9781461243847.</li>
+<li><a
+href="https://CRAN.R-project.org/package=CMplot">https://CRAN.R-project.org/package=CMplot</a></li>
+<li>Yu G, Wang LG, Han Y, He QY (2012). clusterProfiler: an R package
+for comparing biological themes among gene clusters. <em>OMICS</em>
+16(5):284-287. <a
+href="https://doi.org/10.1089/omi.2011.0118">https://doi.org/10.1089/omi.2011.0118</a></li>
+<li>Leek JT, Johnson WE, Parker HS, Jaffe AE, Storey JD (2012). The sva
+package for removing batch effects and other unwanted variation in
+high-throughput experiments. <em>Bioinformatics</em> 28(6):882-883. <a
+href="https://doi.org/10.1093/bioinformatics/bts034">https://doi.org/10.1093/bioinformatics/bts034</a></li>
+<li>Peters TJ, Buckley MJ, Statham AL, Pidsley R, Samaras K, Lord RV,
+Clark SJ, Molloy PL (2015). De novo identification of differentially
+methylated regions in the human genome. <em>Epigenetics &amp;
+Chromatin</em> 8:6. <a
+href="https://doi.org/10.1186/1756-8935-8-6">https://doi.org/10.1186/1756-8935-8-6</a></li>
+</ol>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 

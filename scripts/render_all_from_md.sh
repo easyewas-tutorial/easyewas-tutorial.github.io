@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+
+if ! command -v pandoc >/dev/null 2>&1; then
+  echo "pandoc is required but not found in PATH" >&2
+  exit 1
+fi
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+updated=0
+skipped=0
+
+md_list_file="$TMP_DIR/md_list.txt"
+if [[ $# -gt 0 ]]; then
+  : > "$md_list_file"
+  for arg in "$@"; do
+    rel="${arg#./}"
+    if [[ "$rel" != *.md ]]; then
+      rel="${rel}.md"
+    fi
+    echo "$rel" >> "$md_list_file"
+  done
+else
+  (cd "$ROOT_DIR" && rg --files -g "*.md" | LC_ALL=C sort) > "$md_list_file"
+fi
+
+while IFS= read -r md_rel; do
+  [[ -z "$md_rel" ]] && continue
+
+  if [[ ! -f "$ROOT_DIR/$md_rel" ]]; then
+    echo "Skip (missing md): $md_rel"
+    skipped=$((skipped + 1))
+    continue
+  fi
+
+  html_rel="${md_rel%.md}.html"
+  md_path="$ROOT_DIR/$md_rel"
+  html_path="$ROOT_DIR/$html_rel"
+
+  if [[ ! -f "$html_path" ]]; then
+    echo "Skip (missing html): $md_rel"
+    skipped=$((skipped + 1))
+    continue
+  fi
+
+  shell_path="$TMP_DIR/shell.html"
+  if git -C "$ROOT_DIR" cat-file -e "HEAD:$html_rel" 2>/dev/null; then
+    git -C "$ROOT_DIR" show "HEAD:$html_rel" > "$shell_path"
+  else
+    cp "$html_path" "$shell_path"
+  fi
+
+  body_raw="$TMP_DIR/body_raw.html"
+  body_path="$TMP_DIR/body.html"
+  prefix_path="$TMP_DIR/prefix.html"
+  suffix_path="$TMP_DIR/suffix.html"
+
+  pandoc "$md_path" -f gfm -t html5 > "$body_raw"
+
+  # Keep pkgdown's page header and strip duplicate top-level title from markdown.
+  perl -0777 -pe 's/^\s*<h1[^>]*>.*?<\/h1>\s*//s' "$body_raw" > "$body_path"
+
+  # Rewrite .md links to .html in href attributes.
+  perl -0777 -i -pe 's/href="([^"]+)\.md(#[^"]*)?"/href="$1.html$2"/g' "$body_path"
+
+  perl -0777 -ne '
+    if (m#\A(.*?<main id="main"[^>]*>.*?<div class="page-header">.*?</div>\s*)#s) {
+      print $1;
+    } else {
+      exit 1;
+    }
+  ' "$shell_path" > "$prefix_path" || {
+    echo "Skip (cannot locate main/page-header): $html_rel"
+    skipped=$((skipped + 1))
+    continue
+  }
+
+  perl -0777 -ne '
+    if (m#(<\/main>.*)\z#s) {
+      print $1;
+    } else {
+      exit 1;
+    }
+  ' "$shell_path" > "$suffix_path" || {
+    echo "Skip (cannot locate main end): $html_rel"
+    skipped=$((skipped + 1))
+    continue
+  }
+
+  cat "$prefix_path" "$body_path" "$suffix_path" > "$html_path"
+  echo "Updated: $html_rel (from $md_rel)"
+  updated=$((updated + 1))
+done < "$md_list_file"
+
+echo
+echo "Done. Updated: $updated, Skipped: $skipped"

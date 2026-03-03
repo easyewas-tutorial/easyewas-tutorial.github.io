@@ -37,126 +37,100 @@ Computes a kernel estimate against a null comparison to identify significantly D
       <h1>Perform Differentially Methylated Region analysis</h1>
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/R/dmrEWAS.R" class="external-link"><code>R/dmrEWAS.R</code></a></small>
       <div class="d-none name"><code>dmrEWAS.Rd</code></div>
-    </div>
-
-    <div class="ref-description section level2">
-    <p>Perform differential methylation analysis based on the R package <span class="pkg">DMRcate</span>.
-Computes a kernel estimate against a null comparison to identify significantly DMRs.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dmrEWAS</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  chipType <span class="op">=</span> <span class="st">"EPICV2"</span>,</span>
-<span>  what <span class="op">=</span> <span class="st">"Beta"</span>,</span>
-<span>  epicv2Filter <span class="op">=</span> <span class="st">"mean"</span>,</span>
-<span>  expo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cov <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  genome <span class="op">=</span> <span class="st">"hg38"</span>,</span>
-<span>  fdrCPG <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  pcutoff <span class="op">=</span> <span class="st">"fdr"</span>,</span>
-<span>  lambda <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  C <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  min.cpgs <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"default"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-    </div>
-
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>An R6 class integrated with all the information.</p></dd>
-
-
-<dt id="arg-chiptype">chipType<a class="anchor" aria-label="anchor" href="#arg-chiptype"></a></dt>
-<dd><p>The Illumina chip versions for user measurement of methylation data,
-including "450K","EPICV1", and "EPICV2". The default is "EPICV2".</p></dd>
-
-
-<dt id="arg-what">what<a class="anchor" aria-label="anchor" href="#arg-what"></a></dt>
-<dd><p>Types of methylation values, including "Beta" and "M". Default to "Beta".</p></dd>
-
-
-<dt id="arg-epicv-filter">epicv2Filter<a class="anchor" aria-label="anchor" href="#arg-epicv-filter"></a></dt>
-<dd><p>Strategy for filtering probe replicates that map to the same CpG site.
-"mean" takes the mean of the available probes; "sensitivity" takes the available probe most
-sensitive to methylation change; "precision" either selects the available probe with the
-lowest variation from the consensus value (most precise), or takes the mean if that confers
-the lowest variation instead, "random" takes a single probe at random from each replicate group.</p></dd>
-
-
-<dt id="arg-expo">expo<a class="anchor" aria-label="anchor" href="#arg-expo"></a></dt>
-<dd><p>Name of the exposure variable used in the DMR analysis.</p></dd>
-
-
-<dt id="arg-cov">cov<a class="anchor" aria-label="anchor" href="#arg-cov"></a></dt>
-<dd><p>Name(s) of covariate(s) used in the DMR analysis, with each  name separated by
-a comma. Ensure there are no space. e.g. "cov1,cov2,cov3".</p></dd>
-
-
-<dt id="arg-genome">genome<a class="anchor" aria-label="anchor" href="#arg-genome"></a></dt>
-<dd><p>Reference genome for annotating DMRs.
-Must be consistent with the array platform used:</p><ul><li><p>Use <code>"hg38"</code> for EPICV2 arrays.</p></li>
+    <p>Perform differential methylation analysis based on the R package
+DMRcate. Computes a kernel estimate against a null comparison to
+identify significantly DMRs.</p>
+<h2 id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dmrEWAS</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  input,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">what =</span> <span class="st">&quot;Beta&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">epicv2Filter =</span> <span class="st">&quot;mean&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">expo =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cov =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">genome =</span> <span class="st">&quot;hg38&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">fdrCPG =</span> <span class="fl">0.05</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pcutoff =</span> <span class="st">&quot;fdr&quot;</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda =</span> <span class="dv">1000</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">C =</span> <span class="dv">2</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.cpgs =</span> <span class="dv">2</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;default&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="arguments">Arguments</h2>
+<ul>
+<li><p>input:</p>
+<p>An R6 class integrated with all the information.</p></li>
+<li><p>chipType:</p>
+<p>The Illumina chip versions for user measurement of methylation data,
+including "450K","EPICV1", and "EPICV2". The default is
+"EPICV2".</p></li>
+<li><p>what:</p>
+<p>Types of methylation values, including "Beta" and "M". Default to
+"Beta".</p></li>
+<li><p>epicv2Filter:</p>
+<p>Strategy for filtering probe replicates that map to the same CpG
+site. "mean" takes the mean of the available probes; "sensitivity" takes
+the available probe most sensitive to methylation change; "precision"
+either selects the available probe with the lowest variation from the
+consensus value (most precise), or takes the mean if that confers the
+lowest variation instead, "random" takes a single probe at random from
+each replicate group.</p></li>
+<li><p>expo:</p>
+<p>Name of the exposure variable used in the DMR analysis.</p></li>
+<li><p>cov:</p>
+<p>Name(s) of covariate(s) used in the DMR analysis, with each name
+separated by a comma. Ensure there are no space. e.g.
+"cov1,cov2,cov3".</p></li>
+<li><p>genome:</p>
+<p>Reference genome for annotating DMRs. Must be consistent with the
+array platform used:</p>
+<ul>
+<li><p>Use <code>"hg38"</code> for EPICV2 arrays.</p></li>
 <li><p>Use <code>"hg19"</code> for 450K and EPICV1 arrays.</p></li>
-</ul><p>Note: the <code>genome</code> argument does not currently affect the internal behavior of <code>extractRanges()</code>
-(i.e., no liftover is performed).</p></dd>
-
-
-<dt id="arg-fdrcpg">fdrCPG<a class="anchor" aria-label="anchor" href="#arg-fdrcpg"></a></dt>
-<dd><p>Used to individually assess the significance of each CpG site. If the FDR-adjusted
-p-value of a CpG site is below the specified fdrCPG threshold, the site will be marked as significant.
-The default value is 0.05.</p></dd>
-
-
-<dt id="arg-pcutoff">pcutoff<a class="anchor" aria-label="anchor" href="#arg-pcutoff"></a></dt>
-<dd><p>Used to determine the threshold for DMRs. It is strongly recommended to use the
-default (fdr), unless you are confident about the risk of Type I errors (false positives).</p></dd>
-
-
-<dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
-<dd><p>If the distance between two significant CpG sites is greater than or equal
-to lambda, they will be considered as belonging to different DMRs. The default value is 1000
-nucleotides, meaning that if the distance between two significant CpG sites exceeds 1000
-nucleotides, they will be separated into different DMRs.</p></dd>
-
-
-<dt id="arg-c">C<a class="anchor" aria-label="anchor" href="#arg-c"></a></dt>
-<dd><p>Scaling factor for bandwidth. Gaussian kernel is calculated where lambda/C = sigma.
-Empirical testing shows for both Illumina and bisulfite sequencing data that, when lambda=1000,
-near-optimal prediction of sequencing-derived DMRs is obtained when C is approximately 2,
-i.e. 1 standard deviation of Gaussian kernel = 500 base pairs. Cannot be &lt; 0.2.</p></dd>
-
-
-<dt id="arg-min-cpgs">min.cpgs<a class="anchor" aria-label="anchor" href="#arg-min-cpgs"></a></dt>
-<dd><p>Minimum number of consecutive CpGs constituting a DMR. Default to 2.</p></dd>
-
-
-<dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>User-customized .csv file name for storing DMR results. If "default", it will
-be named as "DMRresult".</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>input, An R6 class object integrating all information.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadEWAS.html">loadEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, ExpoData <span class="op">=</span> <span class="st">"default"</span>, MethyData <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="transEWAS.html">transEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, Vars <span class="op">=</span> <span class="st">"cov1"</span>, TypeTo <span class="op">=</span> <span class="st">"factor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">dmrEWAS</span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, filename <span class="op">=</span> <span class="st">"default"</span>, chipType <span class="op">=</span> <span class="st">"EPICV2"</span>, what <span class="op">=</span> <span class="st">"Beta"</span>, expo <span class="op">=</span> <span class="st">"var"</span>,</span></span>
-<span class="r-in"><span>cov <span class="op">=</span> <span class="st">"cov1,cov2"</span>, genome <span class="op">=</span> <span class="st">"hg38"</span>,<span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</ul>
+<p>Note: the <code>genome</code> argument does not currently affect the
+internal behavior of <code>extractRanges()</code> (i.e., no liftover is
+performed).</p></li>
+<li><p>fdrCPG:</p>
+<p>Used to individually assess the significance of each CpG site. If the
+FDR-adjusted p-value of a CpG site is below the specified fdrCPG
+threshold, the site will be marked as significant. The default value is
+0.05.</p></li>
+<li><p>pcutoff:</p>
+<p>Used to determine the threshold for DMRs. It is strongly recommended
+to use the default (fdr), unless you are confident about the risk of
+Type I errors (false positives).</p></li>
+<li><p>lambda:</p>
+<p>If the distance between two significant CpG sites is greater than or
+equal to lambda, they will be considered as belonging to different DMRs.
+The default value is 1000 nucleotides, meaning that if the distance
+between two significant CpG sites exceeds 1000 nucleotides, they will be
+separated into different DMRs.</p></li>
+<li><p>C:</p>
+<p>Scaling factor for bandwidth. Gaussian kernel is calculated where
+lambda/C = sigma. Empirical testing shows for both Illumina and
+bisulfite sequencing data that, when lambda=1000, near-optimal
+prediction of sequencing-derived DMRs is obtained when C is
+approximately 2, i.e. 1 standard deviation of Gaussian kernel = 500 base
+pairs. Cannot be &lt; 0.2.</p></li>
+<li><p>min.cpgs:</p>
+<p>Minimum number of consecutive CpGs constituting a DMR. Default to
+2.</p></li>
+<li><p>filename:</p>
+<p>User-customized .csv file name for storing DMR results. If "default",
+it will be named as "DMRresult".</p></li>
+</ul>
+<h2 id="value">Value</h2>
+<p>input, An R6 class object integrating all information.</p>
+<h2 id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) { <span class="co"># \dontrun{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">loadEWAS</span>(<span class="at">input =</span> res, <span class="at">ExpoData =</span> <span class="st">&quot;default&quot;</span>, <span class="at">MethyData =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(<span class="at">input =</span> res, <span class="at">Vars =</span> <span class="st">&quot;cov1&quot;</span>, <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">dmrEWAS</span>(<span class="at">input =</span> res, <span class="at">filename =</span> <span class="st">&quot;default&quot;</span>, <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>, <span class="at">what =</span> <span class="st">&quot;Beta&quot;</span>, <span class="at">expo =</span> <span class="st">&quot;var&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">cov =</span> <span class="st">&quot;cov1,cov2&quot;</span>, <span class="at">genome =</span> <span class="st">&quot;hg38&quot;</span>,)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>} <span class="co"># }</span></span></code></pre></div>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 

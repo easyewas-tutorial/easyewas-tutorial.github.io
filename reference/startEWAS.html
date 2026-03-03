@@ -37,128 +37,95 @@ deviation and significance p value (or adjust p value) of each site."></head><bo
       <h1>Perform EWAS Analysis</h1>
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/R/startEWAS.R" class="external-link"><code>R/startEWAS.R</code></a></small>
       <div class="d-none name"><code>startEWAS.Rd</code></div>
-    </div>
-
-    <div class="ref-description section level2">
     <p>Perform EWAS analysis to obtain the coefficient value, standard
 deviation and significance p value (or adjust p value) of each site.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">startEWAS</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"default"</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"lm"</span>,</span>
-<span>  expo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cov <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  random <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  status <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  adjustP <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  chipType <span class="op">=</span> <span class="st">"EPICV2"</span>,</span>
-<span>  core <span class="op">=</span> <span class="st">"default"</span>,</span>
-<span>  annotation_cache <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  auto_download_annotation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  annotation_base_url <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"easyEWAS.annotation_base_url"</span>,</span>
-<span>    <span class="st">"https://github.com/ytwangZero/easyEWAS_materials/raw/main/annotation"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-    </div>
-
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>An R6 class integrated with all the information obtained from the loadEWAS or
-transEWAS function.</p></dd>
-
-
-<dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>filename Name of the output CSV file to store EWAS results. If set to "default",
-the file will be named "ewasresult.csv" and saved in the specified output directory.</p></dd>
-
-
-<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
-<dd><p>Statistical model to use for EWAS analysis. Options include:</p><ul><li><p>"lm": Linear regression (default)</p></li>
+<h2 id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">startEWAS</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  input,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">filename =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">expo =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cov =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">random =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">status =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjustP =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">core =</span> <span class="st">&quot;default&quot;</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_cache =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">auto_download_annotation =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_base_url =</span> <span class="fu">getOption</span>(<span class="st">&quot;easyEWAS.annotation_base_url&quot;</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://github.com/ytwangZero/easyEWAS_materials/raw/main/annotation&quot;</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="arguments">Arguments</h2>
+<ul>
+<li><p>input:</p>
+<p>An R6 class integrated with all the information obtained from the
+loadEWAS or transEWAS function.</p></li>
+<li><p>filename:</p>
+<p>filename Name of the output CSV file to store EWAS results. If set to
+"default", the file will be named "ewasresult.csv" and saved in the
+specified output directory.</p></li>
+<li><p>model:</p>
+<p>Statistical model to use for EWAS analysis. Options include:</p>
+<ul>
+<li><p>"lm": Linear regression (default)</p></li>
 <li><p>"lmer": Linear mixed-effects model</p></li>
 <li><p>"cox": Cox proportional hazards model</p></li>
-</ul></dd>
-
-
-<dt id="arg-expo">expo<a class="anchor" aria-label="anchor" href="#arg-expo"></a></dt>
-<dd><p>Name of the exposure variable used in the EWAS analysis.</p></dd>
-
-
-<dt id="arg-cov">cov<a class="anchor" aria-label="anchor" href="#arg-cov"></a></dt>
-<dd><p>Comma-separated list of covariate variable names to include in the model (e.g.,
-"age,sex,bmi"). Do not include spaces between names. Optional.</p></dd>
-
-
-<dt id="arg-random">random<a class="anchor" aria-label="anchor" href="#arg-random"></a></dt>
-<dd><p>Name of the grouping variable for the random intercept, required only when using
-the "lmer" model.</p></dd>
-
-
-<dt id="arg-time">time<a class="anchor" aria-label="anchor" href="#arg-time"></a></dt>
-<dd><p>Name of the time-to-event variable, required only when using the "cox" model.</p></dd>
-
-
-<dt id="arg-status">status<a class="anchor" aria-label="anchor" href="#arg-status"></a></dt>
-<dd><p>Name of the event/censoring indicator variable, required only when using the "cox" model.</p></dd>
-
-
-<dt id="arg-adjustp">adjustP<a class="anchor" aria-label="anchor" href="#arg-adjustp"></a></dt>
-<dd><p>Logical. If TRUE (default), adjusts p-values using both FDR (Benjamini-Hochberg) and
-Bonferroni correction methods.</p></dd>
-
-
-<dt id="arg-chiptype">chipType<a class="anchor" aria-label="anchor" href="#arg-chiptype"></a></dt>
-<dd><p>Illumina array platform used for DNA methylation measurement. Available options:</p><ul><li><p>"27K"</p></li>
+</ul></li>
+<li><p>expo:</p>
+<p>Name of the exposure variable used in the EWAS analysis.</p></li>
+<li><p>cov:</p>
+<p>Comma-separated list of covariate variable names to include in the
+model (e.g., "age,sex,bmi"). Do not include spaces between names.
+Optional.</p></li>
+<li><p>random:</p>
+<p>Name of the grouping variable for the random intercept, required only
+when using the "lmer" model.</p></li>
+<li><p>time:</p>
+<p>Name of the time-to-event variable, required only when using the
+"cox" model.</p></li>
+<li><p>status:</p>
+<p>Name of the event/censoring indicator variable, required only when
+using the "cox" model.</p></li>
+<li><p>adjustP:</p>
+<p>Logical. If TRUE (default), adjusts p-values using both FDR
+(Benjamini-Hochberg) and Bonferroni correction methods.</p></li>
+<li><p>chipType:</p>
+<p>Illumina array platform used for DNA methylation measurement.
+Available options:</p>
+<ul>
+<li><p>"27K"</p></li>
 <li><p>"450K"</p></li>
 <li><p>"EPICV1"</p></li>
 <li><p>"EPICV2" (default)</p></li>
 <li><p>"MSA"</p></li>
-</ul></dd>
-
-
-<dt id="arg-core">core<a class="anchor" aria-label="anchor" href="#arg-core"></a></dt>
-<dd><p>Number of CPU cores to use for parallel processing. If set to "default", uses the number
-of available physical cores minus one.</p></dd>
-
-
-<dt id="arg-annotation-cache">annotation_cache<a class="anchor" aria-label="anchor" href="#arg-annotation-cache"></a></dt>
-<dd><p>Local directory for cached annotation files. If NULL, uses
-<code>tools::R_user_dir("easyEWAS", "cache")/annotation</code>.</p></dd>
-
-
-<dt id="arg-auto-download-annotation">auto_download_annotation<a class="anchor" aria-label="anchor" href="#arg-auto-download-annotation"></a></dt>
-<dd><p>Logical. If TRUE, annotation files are downloaded
-automatically when missing.</p></dd>
-
-
-<dt id="arg-annotation-base-url">annotation_base_url<a class="anchor" aria-label="anchor" href="#arg-annotation-base-url"></a></dt>
-<dd><p>Base URL for annotation <code>.rds</code> files.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>input, An R6 class object integrating all information.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="loadEWAS.html">loadEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, ExpoData <span class="op">=</span> <span class="st">"default"</span>, MethyData <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="transEWAS.html">transEWAS</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, Vars <span class="op">=</span> <span class="st">"cov1"</span>, TypeTo <span class="op">=</span> <span class="st">"factor"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="downloadAnnotEWAS.html">downloadAnnotEWAS</a></span><span class="op">(</span>chipType <span class="op">=</span> <span class="st">"EPICV2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">startEWAS</span><span class="op">(</span>input <span class="op">=</span> <span class="va">res</span>, filename <span class="op">=</span> <span class="st">"default"</span>, chipType <span class="op">=</span> <span class="st">"EPICV2"</span>, model <span class="op">=</span> <span class="st">"lm"</span>,</span></span>
-<span class="r-in"><span>expo <span class="op">=</span> <span class="st">"var"</span>, cov <span class="op">=</span> <span class="st">"cov1,cov2"</span>,adjustP <span class="op">=</span> <span class="cn">TRUE</span>, core <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-</code></pre></div>
-    </div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</ul></li>
+<li><p>core:</p>
+<p>Number of CPU cores to use for parallel processing. If set to
+"default", uses the number of available physical cores minus
+one.</p></li>
+<li><p>annotation_cache:</p>
+<p>Local directory for cached annotation files. If NULL, uses
+<code>tools::R_user_dir("easyEWAS", "cache")/annotation</code>.</p></li>
+<li><p>auto_download_annotation:</p>
+<p>Logical. If TRUE, annotation files are downloaded automatically when
+missing.</p></li>
+<li><p>annotation_base_url:</p>
+<p>Base URL for annotation <code>.rds</code> files.</p></li>
+</ul>
+<h2 id="value">Value</h2>
+<p>input, An R6 class object integrating all information.</p>
+<h2 id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="cn">FALSE</span>) { <span class="co"># \dontrun{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">loadEWAS</span>(<span class="at">input =</span> res, <span class="at">ExpoData =</span> <span class="st">&quot;default&quot;</span>, <span class="at">MethyData =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(<span class="at">input =</span> res, <span class="at">Vars =</span> <span class="st">&quot;cov1&quot;</span>, <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">downloadAnnotEWAS</span>(<span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">startEWAS</span>(<span class="at">input =</span> res, <span class="at">filename =</span> <span class="st">&quot;default&quot;</span>, <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>, <span class="at">model =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">expo =</span> <span class="st">&quot;var&quot;</span>, <span class="at">cov =</span> <span class="st">&quot;cov1,cov2&quot;</span>,<span class="at">adjustP =</span> <span class="cn">TRUE</span>, <span class="at">core =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>} <span class="co"># }</span></span></code></pre></div>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 

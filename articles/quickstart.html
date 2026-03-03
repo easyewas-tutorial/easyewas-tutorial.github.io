@@ -61,121 +61,97 @@
       
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
       <div class="d-none name"><code>quickstart.Rmd</code></div>
-    </div>
-
-    
-    
-<p>This tutorial shows a minimal end-to-end workflow for
+    <p>This tutorial shows a minimal end-to-end workflow for
 <code>easyEWAS</code>.</p>
-<div class="section level2">
-<h2 id="install">1. Install<a class="anchor" aria-label="anchor" href="#install"></a>
-</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"remotes"</span>, <span class="st">"BiocManager"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ytwangZero/easyEWAS"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="load-package">2. Load package<a class="anchor" aria-label="anchor" href="#load-package"></a>
-</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ytwangZero.github.io/easyEWAS/">easyEWAS</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="download-chip-annotation-once">3. Download chip annotation once<a class="anchor" aria-label="anchor" href="#download-chip-annotation-once"></a>
-</h2>
-<p><code><a href="../reference/startEWAS.html">startEWAS()</a></code> needs chip annotation data. Download and
-cache it before analysis.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/downloadAnnotEWAS.html">downloadAnnotEWAS</a></span><span class="op">(</span>chipType <span class="op">=</span> <span class="st">"EPICV2"</span><span class="op">)</span></span></code></pre></div>
-<p>If you host annotation files on your own server:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  easyEWAS.annotation_base_url <span class="op">=</span></span>
-<span>    <span class="st">"https://your-server/path/to/annotation"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/downloadAnnotEWAS.html">downloadAnnotEWAS</a></span><span class="op">(</span>chipType <span class="op">=</span> <span class="st">"EPICV2"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="run-a-minimal-ewas-workflow">4. Run a minimal EWAS workflow<a class="anchor" aria-label="anchor" href="#run-a-minimal-ewas-workflow"></a>
-</h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/initEWAS.html">initEWAS</a></span><span class="op">(</span>outpath <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadEWAS.html">loadEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  ExpoData <span class="op">=</span> <span class="va">sampledata</span>,</span>
-<span>  MethyData <span class="op">=</span> <span class="va">methydata</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/transEWAS.html">transEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  Vars <span class="op">=</span> <span class="st">"cov1"</span>,</span>
-<span>  TypeTo <span class="op">=</span> <span class="st">"factor"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/startEWAS.html">startEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"lm"</span>,</span>
-<span>  expo <span class="op">=</span> <span class="st">"var"</span>,</span>
-<span>  cov <span class="op">=</span> <span class="st">"cov1,cov2"</span>,</span>
-<span>  chipType <span class="op">=</span> <span class="st">"EPICV2"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="make-plots">5. Make plots<a class="anchor" aria-label="anchor" href="#make-plots"></a>
-</h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotEWAS.html">plotEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  p <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  file <span class="op">=</span> <span class="st">"jpg"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="optional-downstream-analyses">6. Optional downstream analyses<a class="anchor" aria-label="anchor" href="#optional-downstream-analyses"></a>
-</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bootEWAS.html">bootEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  filterP <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  cutoff <span class="op">=</span> <span class="fl">0.001</span>,</span>
-<span>  times <span class="op">=</span> <span class="fl">100</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichEWAS.html">enrichEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"GO"</span>,</span>
-<span>  filterP <span class="op">=</span> <span class="st">"PVAL"</span>,</span>
-<span>  cutoff <span class="op">=</span> <span class="fl">0.05</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<h2 id="1-install">1. Install</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
+<h2 id="2-load-package">2. Load package</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(easyEWAS)</span></code></pre></div>
+<h2 id="3-download-chip-annotation-once">3. Download chip annotation
+once</h2>
+<p><a
+href="https://ytwangZero.github.io/easyEWAS/reference/startEWAS.html"><code>startEWAS()</code></a>
+needs chip annotation data. Download and cache it before analysis.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">downloadAnnotEWAS</span>(<span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>) <span class="co"># also &quot;EPICV1&quot; or others.</span></span></code></pre></div>
+<h2 id="4-run-a-minimal-ewas-workflow">4. Run a minimal EWAS
+workflow</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;sampledata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;easyEWAS&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;methydata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;easyEWAS&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">loadEWAS</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ExpoData =</span> sampledata,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">MethyData =</span> methydata</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Vars =</span> <span class="st">&quot;cov1&quot;</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">startEWAS</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">expo =</span> <span class="st">&quot;var&quot;</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">cov =</span> <span class="st">&quot;cov1,cov2&quot;</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="5-make-plots">5. Make plots</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">plotEWAS</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> <span class="st">&quot;PVAL&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="fl">0.05</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;jpg&quot;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="6-optional-downstream-analyses">6. Optional downstream
+analyses</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">bootEWAS</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">filterP =</span> <span class="st">&quot;PVAL&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="fl">0.001</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">100</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">enrichEWAS</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;GO&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">filterP =</span> <span class="st">&quot;PVAL&quot;</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="fl">0.05</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>For DMR analysis, install <code>DMRcate</code> first:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"DMRcate"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dmrEWAS.html">dmrEWAS</a></span><span class="op">(</span></span>
-<span>  input <span class="op">=</span> <span class="va">res</span>,</span>
-<span>  chipType <span class="op">=</span> <span class="st">"EPICV2"</span>,</span>
-<span>  what <span class="op">=</span> <span class="st">"Beta"</span>,</span>
-<span>  expo <span class="op">=</span> <span class="st">"var"</span>,</span>
-<span>  cov <span class="op">=</span> <span class="st">"cov1,cov2"</span>,</span>
-<span>  genome <span class="op">=</span> <span class="st">"hg38"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="output-files">7. Output files<a class="anchor" aria-label="anchor" href="#output-files"></a>
-</h2>
-<p>All outputs are written to the folder created by
-<code><a href="../reference/initEWAS.html">initEWAS()</a></code>, by default:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;DMRcate&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">dmrEWAS</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">input =</span> res,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">what =</span> <span class="st">&quot;Beta&quot;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">expo =</span> <span class="st">&quot;var&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cov =</span> <span class="st">&quot;cov1,cov2&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">genome =</span> <span class="st">&quot;hg38&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<h2 id="7-output-files">7. Output files</h2>
+<p>All outputs are written to the folder created by <a
+href="https://ytwangZero.github.io/easyEWAS/reference/initEWAS.html"><code>initEWAS()</code></a>,
+by default:</p>
 <ul>
 <li><code>EWASresult/ewasresult.csv</code></li>
-<li>Plot files from <code><a href="../reference/plotEWAS.html">plotEWAS()</a></code>
-</li>
+<li>Plot files from <a
+href="https://ytwangZero.github.io/easyEWAS/reference/plotEWAS.html"><code>plotEWAS()</code></a></li>
 <li>Optional downstream result files (<code>bootresult.csv</code>,
 <code>enrichresult.csv</code>, <code>DMRresult.csv</code>)</li>
 </ul>
-</div>
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 

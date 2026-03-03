@@ -37,48 +37,32 @@ These are designed to be used inside parallel loops with minimal memory footprin
       <h1>EWAS Model Computation Utilities</h1>
       <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/R/ewasfun_utils.R" class="external-link"><code>R/ewasfun_utils.R</code></a></small>
       <div class="d-none name"><code>ewasfun_lm.Rd</code></div>
-    </div>
-
-    <div class="ref-description section level2">
-    <p>Model fitting functions for EWAS analysis using linear, mixed, or Cox models.
-These are designed to be used inside parallel loops with minimal memory footprint.</p>
-    </div>
-
-    <div class="section level2">
-    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ewasfun_lm</span><span class="op">(</span><span class="va">cg</span>, <span class="va">ff</span>, <span class="va">cov</span>, <span class="va">facnum</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ewasfun_lmer</span><span class="op">(</span><span class="va">cg</span>, <span class="va">ff</span>, <span class="va">cov</span>, <span class="va">facnum</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ewasfun_cox</span><span class="op">(</span><span class="va">cg</span>, <span class="va">ff</span>, <span class="va">cov</span><span class="op">)</span></span></code></pre></div>
-    </div>
-
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-cg">cg<a class="anchor" aria-label="anchor" href="#arg-cg"></a></dt>
-<dd><p>A row vector representing one CpG site's beta values across samples.</p></dd>
-
-
-<dt id="arg-ff">ff<a class="anchor" aria-label="anchor" href="#arg-ff"></a></dt>
-<dd><p>A model formula object (e.g., cpg ~ var1 + var2).</p></dd>
-
-
-<dt id="arg-cov">cov<a class="anchor" aria-label="anchor" href="#arg-cov"></a></dt>
-<dd><p>A data.frame containing the covariates for the model.</p></dd>
-
-
-<dt id="arg-facnum">facnum<a class="anchor" aria-label="anchor" href="#arg-facnum"></a></dt>
-<dd><p>(Only for lm/lmer) Number of factor levels for exposure variable.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A numeric vector with model coefficients, standard errors, and p-values.</p>
-    </div>
-
-  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    <p>Model fitting functions for EWAS analysis using linear, mixed, or Cox
+models. These are designed to be used inside parallel loops with minimal
+memory footprint.</p>
+<h2 id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ewasfun_lm</span>(cg, ff, cov, facnum)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ewasfun_lmer</span>(cg, ff, cov, facnum)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ewasfun_cox</span>(cg, ff, cov)</span></code></pre></div>
+<h2 id="arguments">Arguments</h2>
+<ul>
+<li><p>cg:</p>
+<p>A row vector representing one CpG site's beta values across
+samples.</p></li>
+<li><p>ff:</p>
+<p>A model formula object (e.g., cpg ~ var1 + var2).</p></li>
+<li><p>cov:</p>
+<p>A data.frame containing the covariates for the model.</p></li>
+<li><p>facnum:</p>
+<p>(Only for lm/lmer) Number of factor levels for exposure
+variable.</p></li>
+</ul>
+<h2 id="value">Value</h2>
+<p>A numeric vector with model coefficients, standard errors, and
+p-values.</p>
+</main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
