@@ -1,6 +1,11 @@
 # easyEWAS
 
-<p><small><i class="fa-regular fa-calendar"></i> Last updated: 2026-03-03 &nbsp;|&nbsp; <i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding)</small></p>
+[![R](https://img.shields.io/badge/R-%3E%3D%204.2-blue)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-ytwangZero%2FeasyEWAS-black?logo=github)](#)
+[![Last updated](https://img.shields.io/badge/Last%20updated-2026--03--03-informational)](#)
+
+<p><small><i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding)</small></p>
 
 easyEWAS is an R package for conducting Epigenome-Wide Association Study (EWAS) 
 in a unified and reproducible way. It supports Illumina methylation array platforms 
@@ -9,7 +14,7 @@ covering association modeling, batch-effect handling, result
 visualization, bootstrap-based internal validation, enrichment analysis,
 and optional DMR discovery.
 
-## <i class="fa-solid fa-circle-exclamation"></i> Important: Download Annotation by Chip Type (Must Read)
+## <i class="fa-solid fa-circle-exclamation"></i> Download Annotation by Chip Type (Must Read)
 
 <div class="alert alert-warning" role="alert">
 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -19,11 +24,11 @@ Please download annotation for your chip(s) before running <code>startEWAS()</co
 
 ### Supported `chipType` Values
 
-- `"27K"`
-- `"450K"`
-- `"EPICV1"`
-- `"EPICV2"`
-- `"MSA"`
+- `27K` — Infinium HumanMethylation27 BeadChip  
+- `450K` — Infinium HumanMethylation450 BeadChip  
+- `EPICV1` — Infinium MethylationEPIC BeadChip (v1.0)  
+- `EPICV2` — Infinium MethylationEPIC BeadChip (v2.0)  
+- `MSA` — Infinium Methylation Screening Array  
 
 ### Function Signature
 
@@ -40,7 +45,7 @@ downloadAnnotEWAS(
 )
 ```
 
-### <i class="fa-solid fa-sliders"></i> Parameter Guide
+### Parameter Guide
 
 | Parameter | What to fill | Example |
 |:--|:--|:--|
@@ -71,7 +76,7 @@ downloadAnnotEWAS(chipType = "EPICV2", cache_dir = "/path/to/annotation_cache")
 <strong>Tip:</strong> keep <code>chipType</code> consistent across <code>downloadAnnotEWAS()</code>, <code>startEWAS()</code>, and <code>dmrEWAS()</code>.
 </div>
 
-## Installation
+## <i class="fa-solid fa-sliders"></i> Installation
 
 Before installing `easyEWAS`, we recommend pre-installing optional
 dependencies used by advanced modules.
@@ -107,13 +112,13 @@ BiocManager::install(
 )
 ```
 
-Install from GitHub:
+### Install from GitHub
 
 ``` r
 remotes::install_github("ytwangZero/easyEWAS")
 ```
 
-Load package:
+### Load package:
 
 ``` r
 library(easyEWAS)

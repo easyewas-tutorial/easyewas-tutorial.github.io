@@ -55,7 +55,15 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="easyewas">easyEWAS<a class="anchor" aria-label="anchor" href="#easyewas"></a>
 </h1></div>
-<p><small><i class="fa-regular fa-calendar"></i> Last updated: 2026-03-03 &nbsp;|&nbsp; <i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding)</small></p>
+<p><a href="#"><img
+src="https://img.shields.io/badge/R-%3E%3D%204.2-blue" alt="R" /></a> <a
+href="#"><img src="https://img.shields.io/badge/License-MIT-green.svg"
+alt="License: MIT" /></a> <a href="#"><img
+src="https://img.shields.io/badge/GitHub-ytwangZero%2FeasyEWAS-black?logo=github"
+alt="GitHub Repo" /></a> <a href="#"><img
+src="https://img.shields.io/badge/Last%20updated-2026--03--03-informational"
+alt="Last updated" /></a></p>
+<p><small><i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding)</small></p>
 
 <p>easyEWAS is an R package for conducting Epigenome-Wide Association
 Study (EWAS) in a unified and reproducible way. It supports Illumina
@@ -64,8 +72,8 @@ MSA, and provides an end-to-end workflow covering association modeling,
 batch-effect handling, result visualization, bootstrap-based internal
 validation, enrichment analysis, and optional DMR discovery.</p>
 <h2
-id="-important-download-annotation-by-chip-type-must-read"><i class="fa-solid fa-circle-exclamation"></i>
-Important: Download Annotation by Chip Type (Must Read)</h2>
+id="-download-annotation-by-chip-type-must-read"><i class="fa-solid fa-circle-exclamation"></i>
+Download Annotation by Chip Type (Must Read)</h2>
 <div class="alert alert-warning" role="alert">
 <i class="fa-solid fa-triangle-exclamation"></i>
 <strong>Update (March 3, 2026):</strong> chip annotation is no longer bundled in the main package tarball.
@@ -75,11 +83,11 @@ Please download annotation for your chip(s) before running <code>startEWAS()</co
 <h3 id="supported-chiptype-values">Supported <code>chipType</code>
 Values</h3>
 <ul>
-<li><code>"27K"</code></li>
-<li><code>"450K"</code></li>
-<li><code>"EPICV1"</code></li>
-<li><code>"EPICV2"</code></li>
-<li><code>"MSA"</code></li>
+<li><code>27K</code> — Infinium HumanMethylation27 BeadChip</li>
+<li><code>450K</code> — Infinium HumanMethylation450 BeadChip</li>
+<li><code>EPICV1</code> — Infinium MethylationEPIC BeadChip (v1.0)</li>
+<li><code>EPICV2</code> — Infinium MethylationEPIC BeadChip (v2.0)</li>
+<li><code>MSA</code> — Infinium Methylation Screening Array</li>
 </ul>
 <h3 id="function-signature">Function Signature</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">downloadAnnotEWAS</span>(</span>
@@ -92,8 +100,7 @@ Values</h3>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  ),</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">FALSE</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<h3 id="-parameter-guide"><i class="fa-solid fa-sliders"></i> Parameter
-Guide</h3>
+<h3 id="parameter-guide">Parameter Guide</h3>
 <table>
 <thead>
 <tr>
@@ -153,7 +160,8 @@ existing cache.</td>
 <strong>Tip:</strong> keep <code>chipType</code> consistent across <code>downloadAnnotEWAS()</code>, <code>startEWAS()</code>, and <code>dmrEWAS()</code>.
 </div>
 
-<h2 id="installation">Installation</h2>
+<h2 id="-installation"><i class="fa-solid fa-sliders"></i>
+Installation</h2>
 <p>Before installing <code>easyEWAS</code>, we recommend pre-installing
 optional dependencies used by advanced modules.</p>
 <h3 id="core-dependencies-by-function">Core dependencies by
@@ -217,9 +225,9 @@ style="text-align: left;"><code>enrichEWAS(plot = TRUE, plotType = "dot")</code>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ask =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">update =</span> <span class="cn">TRUE</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>Install from GitHub:</p>
+<h3 id="install-from-github">Install from GitHub</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
-<p>Load package:</p>
+<h3 id="load-package">Load package:</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(easyEWAS)</span></code></pre></div>
 <p>If you prefer installing only when needed:</p>
 <ul>
