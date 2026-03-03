@@ -1,0 +1,107 @@
+# easyEWAS
+
+Epigenome-Wide Association Study in R
+
+easyEWAS is an R package for conducting Epigenome-Wide Association Study
+(EWAS) in a unified and reproducible way. It supports Illumina
+methylation array platforms including 27K, 450K, EPIC v1, EPIC v2, and
+MSA, and provides an end-to-end analysis workflow covering association
+modeling, batch-effect handling, result visualization, bootstrap-based
+internal validation, enrichment analysis, and optional DMR discovery.
+
+## Installation
+
+Install from GitHub:
+
+``` r
+
+remotes::install_github("ytwangZero/easyEWAS")
+```
+
+Load package:
+
+``` r
+
+library(easyEWAS)
+```
+
+### Optional dependency for DMR analysis
+
+[`dmrEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/dmrEWAS.md)
+depends on `DMRcate`, which is in `Suggests` and is not installed
+automatically in minimal setups.
+
+``` r
+
+BiocManager::install("DMRcate")
+```
+
+## Update: Annotation Data Loading
+
+Large chip annotation tables are now downloaded on demand and cached
+locally, instead of being bundled inside the main package tarball. This
+makes installation lighter, faster, and more stable for GitHub users.
+
+Download annotation (one-time per chip type):
+
+``` r
+
+downloadAnnotEWAS(chipType = "EPICV2")
+```
+
+If needed, set a custom annotation host:
+
+``` r
+
+options(easyEWAS.annotation_base_url = "https://github.com/ytwangZero/easyEWAS_materials/raw/main/annotation")
+```
+
+## Citation
+
+Wang Y, Jiang M, Niu S, Gao X. easyEWAS: a flexible and user-friendly R
+package for epigenome-wide association study\[J\]. Bioinformatics
+Advances, 2025, 5(1): vbaf026.
+
+# Package index
+
+## All functions
+
+- [`batchEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/batchEWAS.md)
+  : Perform batch effect correction
+- [`bootEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/bootEWAS.md)
+  : Perform Bootstrap-based Internal Validation
+- [`dmrEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/dmrEWAS.md)
+  : Perform Differentially Methylated Region analysis
+- [`downloadAnnotEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/downloadAnnotEWAS.md)
+  : Download and cache chip annotation tables
+- [`enrichEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/enrichEWAS.md)
+  : Enrichment analyses
+- [`ewasfun_lm()`](https://ytwangZero.github.io/easyEWAS/reference/ewasfun_lm.md)
+  [`ewasfun_lmer()`](https://ytwangZero.github.io/easyEWAS/reference/ewasfun_lm.md)
+  [`ewasfun_cox()`](https://ytwangZero.github.io/easyEWAS/reference/ewasfun_lm.md)
+  : EWAS Model Computation Utilities
+- [`initEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/initEWAS.md)
+  : Initialize the EWAS module
+- [`loadEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/loadEWAS.md)
+  : Load all data files for EWAS module
+- [`methydata`](https://ytwangZero.github.io/easyEWAS/reference/methydata.md)
+  : Example Methylation Matrix
+- [`plotEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/plotEWAS.md)
+  : Visualize the results of EWAS analysis
+- [`sampledata`](https://ytwangZero.github.io/easyEWAS/reference/sampledata.md)
+  : Example Sample Metadata
+- [`startEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/startEWAS.md)
+  : Perform EWAS Analysis
+- [`transEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/transEWAS.md)
+  : Convert variable type of sample data
+
+# Articles
+
+### Tutorials
+
+- [easyEWAS
+  Quickstart](https://ytwangZero.github.io/easyEWAS/articles/quickstart.md):
+- [easyEWAS Demo Data Full
+  Tutorial](https://ytwangZero.github.io/easyEWAS/articles/full-pipeline.md):
+- [easyEWAS Troubleshooting
+  Guide](https://ytwangZero.github.io/easyEWAS/articles/troubleshooting.md):

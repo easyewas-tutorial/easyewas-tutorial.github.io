@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap');
+
+:root {
+  --ew-bg: #f3f5f8;
+  --ew-bg-top: #fcfdff;
+  --ew-ink: #1d2733;
+  --ew-muted: #5f6b7a;
+  --ew-primary: #103b63;
+  --ew-accent: #1b79b4;
+  --ew-card: #ffffff;
+  --ew-border: #dee5ef;
+  --ew-shadow: 0 14px 34px rgba(15, 48, 77, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--ew-ink);
+  background-color: var(--ew-bg);
+  background-image: linear-gradient(180deg, var(--ew-bg-top) 0, #f6f8fb 220px, var(--ew-bg) 220px);
+}
+
+.navbar.bg-light {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e2e8f1;
+  box-shadow: 0 6px 20px rgba(16, 59, 99, 0.06);
+}
+
+.navbar .navbar-brand {
+  font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #0f2f4b;
+}
+
+.navbar .nav-link,
+.navbar .dropdown-item {
+  color: #33465c;
+  font-weight: 600;
+}
+
+.navbar .nav-link:hover,
+.navbar .dropdown-item:hover {
+  color: var(--ew-primary);
+}
+
+.navbar .nav-link.active {
+  color: #0d3f6b;
+}
+
+.container[class*="template-"] {
+  margin-top: 1.35rem;
+  margin-bottom: 2.4rem;
+}
+
+.container[class*="template-"] main.col-md-9 {
+  background: var(--ew-card);
+  border: 1px solid var(--ew-border);
+  border-radius: 18px;
+  box-shadow: var(--ew-shadow);
+  padding: 2.1rem 2.3rem 2.3rem;
+}
+
+.template-home main.col-md-9 {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  float: none;
+}
+
+.template-home aside.col-md-3 {
+  display: none;
+}
+
+.container[class*="template-"] aside.col-md-3 {
+  padding-left: 1rem;
+}
+
+.container[class*="template-"] aside.col-md-3 .links,
+.container[class*="template-"] aside.col-md-3 nav,
+.container[class*="template-"] aside.col-md-3 > div {
+  background: #ffffff;
+  border: 1px solid var(--ew-border);
+  border-radius: 14px;
+  padding: 0.95rem 1rem;
+}
+
+.container[class*="template-"] h1,
+.container[class*="template-"] h2,
+.container[class*="template-"] h3 {
+  font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  color: #142d46;
+  letter-spacing: 0.01em;
+}
+
+.container[class*="template-"] h1 {
+  font-size: 2.05rem;
+  margin-bottom: 1.15rem;
+}
+
+.container[class*="template-"] h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #e9eef5;
+}
+
+.container[class*="template-"] p,
+.container[class*="template-"] li {
+  font-size: 1rem;
+  line-height: 1.78;
+}
+
+.container[class*="template-"] a {
+  color: #0d5485;
+}
+
+.container[class*="template-"] a:hover {
+  color: #083f67;
+}
+
+.home-hero {
+  margin: 0 0 1.2rem;
+  padding: 1.2rem 1.3rem;
+  border-radius: 14px;
+  border: 1px solid #d9e4f1;
+  border-left: 4px solid #1c7ab4;
+  background: #f8fbff;
+}
+
+.home-hero .hero-kicker {
+  margin: 0 0 0.5rem;
+  color: #1c6ea2;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+}
+
+.home-hero .hero-lead {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: #23364b;
+}
+
+.container[class*="template-"] pre {
+  border: 1px solid #d9e2ee;
+  border-radius: 12px;
+  background: #f7faff;
+  padding: 0.85rem;
+}
+
+.container[class*="template-"] code {
+  color: #0d4f7d;
+}
+
+.container[class*="template-"] .sourceCode {
+  font-size: 0.93rem;
+}
+
+.container[class*="template-"] table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #dce4ee;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.container[class*="template-"] table th {
+  background: #eff5fb;
+  color: #17324e;
+}
+
+.container[class*="template-"] table th,
+.container[class*="template-"] table td {
+  border-color: #e4eaf2;
+  padding: 0.65rem 0.75rem;
+}
+
+@media (max-width: 991px) {
+  .container[class*="template-"] main.col-md-9 {
+    border-radius: 14px;
+    padding: 1.2rem 1rem 1.4rem;
+  }
+
+  .container[class*="template-"] aside.col-md-3 {
+    display: none;
+  }
+
+  .container[class*="template-"] h1 {
+    font-size: 1.78rem;
+  }
+
+  .home-hero .hero-lead {
+    font-size: 0.98rem;
+  }
+}

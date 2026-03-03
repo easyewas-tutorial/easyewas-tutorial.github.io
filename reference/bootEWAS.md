@@ -1,0 +1,67 @@
+# Perform Bootstrap-based Internal Validation
+
+Users can perform internal validation of the identified differently
+methylated sites based on the bootstrap method.
+
+## Usage
+
+``` r
+bootEWAS(input, filterP = "PVAL", cutoff = 0.05, CpGs = NULL, times = 500,
+bootCI = "perc",filename = "default")
+```
+
+## Arguments
+
+- input:
+
+  An R6 class integrated with all the information obtained from the
+  startEWAS or plotEWAS function.
+
+- filterP:
+
+  The name of the p value columns such as "PVAL", "FDR", and
+  "Bonfferoni." Users use this P-value to screen for significance sites
+  and further conduct internal validation.
+
+- cutoff:
+
+  The cutoff value of the P-value used to filter for further internal
+  validation. The default is 0.05.
+
+- CpGs:
+
+  The name of the methylation site specified by the user for bootstrap
+  analysis, separated by commas. Be careful not to have spaces, such as
+  "cpg1,cpg2".
+
+- times:
+
+  Number of bootstrap times specified by the user. The default value is
+  100 times.
+
+- bootCI:
+
+  A vector of character strings representing the type of interval to
+  base the test on. The value should be one of "norm", "basic", "stud",
+  "perc" (the default), and "bca".
+
+- filename:
+
+  User-customized .csv file name for storing bootstrap results. If
+  "default", it will be named as "bootresult".
+
+## Value
+
+input, An R6 class object integrating all information.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+res <- initEWAS(outpath = "default")
+res <- loadEWAS(input = res, ExpoData = "default", MethyData = "default")
+res <- transEWAS(input = res, Vars = "cov1", TypeTo = "factor")
+res <- startEWAS(input = res, chipType = "EPICV2", model = "lm", expo = "default", adjustP = TRUE)
+res <- bootEWAS(input = res, filterP = "PVAL", cutoff = 0.05, times = 100)
+} # }
+```

@@ -1,0 +1,146 @@
+# Enrichment analyses
+
+Perform GO or KEGG enrichment analysis based on the clusterProfiler
+package.
+
+## Usage
+
+``` r
+enrichEWAS(
+  input,
+  filename = "default",
+  method = "GO",
+  filterP = "PVAL",
+  cutoff = 0.05,
+  ont = "BP",
+  pool = FALSE,
+  plot = TRUE,
+  plotType = "dot",
+  plotcolor = "p.adjust",
+  x = "GeneRatio",
+  showCategory = 10,
+  width = 11,
+  height = 7,
+  pvalueCutoff = 0.05,
+  pAdjustMethod = "BH",
+  qvalueCutoff = 0.2
+)
+```
+
+## Arguments
+
+- input:
+
+  An R6 class integrated with all the information obtained from the
+  startEWAS or plotEWAS or bootEWAS function.
+
+- filename:
+
+  User-customized .xlsx file name for storing EWAS results. If "default"
+  is chosen, it will be named as "enrichresult".
+
+- method:
+
+  Methods of enrichment analysis, including "GO" and "KEGG".
+
+- filterP:
+
+  The name of the p value columns such as "PVAL", "FDR", and
+  "Bonfferoni." Users use this P-value to screen for significance sites
+  and further conduct enrichment analysis.
+
+- cutoff:
+
+  The cutoff value of the P-value used to filter for further enrichment
+  analysis. The default is 0.05.
+
+- ont:
+
+  When choosing GO enrichment analysis, select the GO sub-ontology for
+  which the enrichment analysis will be performed. One of "BP", "MF",
+  and "CC" sub-ontologies, or "ALL" for all three. Default to "BP".
+
+- pool:
+
+  If ont='ALL', whether pool three GO sub-ontologies.
+
+- plot:
+
+  Whether the results of enrichment analysis need to be visualized, the
+  default is TRUE
+
+- plotType:
+
+  Whether to draw a bar plot ("bar") or a dot plot ("dot"), the default
+  is "dot".
+
+- plotcolor:
+
+  It is the vertical axis of the picture of the enrichment analysis
+  results. Users can choose "pvalue" or "p.adjust" or "qvalue". The
+  default is "p.adjust".
+
+- x:
+
+  Character string specifying the variable to be used on the x-axis of
+  the plot. Common options are "GeneRatio" or "Count".
+
+  - "GeneRatio": ratio of input genes annotated to a given term.
+
+  - "Count": the number of input genes annotated to the term.
+
+- showCategory:
+
+  The number of categories which will be displayed in the plots. Default
+  to 10.
+
+- width:
+
+  Width of the PDF output in inches. Default is 11.
+
+- height:
+
+  Height of the PDF output in inches. Default is 7.
+
+- pvalueCutoff:
+
+  The p-value threshold used to filter enrichment results. Only results
+  that pass the p-value test (i.e., those smaller than this value) will
+  be reported. This value refers to the p-value before adjustment. The
+  p-value represents the probability of observing the current level of
+  enrichment under the assumption of no enrichment. The smaller the
+  p-value, the more significant the enrichment result.
+
+- pAdjustMethod:
+
+  The p-value adjustment method used for multiple hypothesis testing,
+  aimed at reducing false positives caused by multiple comparisons. One
+  of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr",
+  "none".
+
+- qvalueCutoff:
+
+  qvalue cutoff on enrichment tests to report as significant. The
+  q-value is the result of controlling the false discovery rate (FDR)
+  and represents the proportion of false positives that may occur when
+  conducting multiple tests.Tests must pass i) pvalueCutoff on
+  unadjusted pvalues, ii) pvalueCutoff on adjusted pvalues and iii)
+  qvalueCutoff on qvalues to be reported. The default is 0.2.
+
+## Value
+
+input, An R6 class object integrating all information.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+res <- initEWAS(outpath = "default")
+res <- loadEWAS(input = res, ExpoData = "default", MethyData = "default")
+res <- transEWAS(input = res, Vars = "cov1", TypeTo = "factor")
+res <- startEWAS(input = res, chipType = "EPICV2", model = "lm", expo = "default", adjustP = TRUE)
+res <- plotEWAS(input = res, pval = "PVAL")
+res <- bootEWAS(input = res, filterP = "PVAL", cutoff = 0.05, times = 100)
+res <- enrichEWAS(input = res, method = "GO", filterP = "PVAL", cutoff = 0.05, pAdjustMethod = "BH")
+} # }
+```
