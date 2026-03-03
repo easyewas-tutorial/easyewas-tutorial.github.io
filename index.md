@@ -1,4 +1,4 @@
-# easyEWAS
+# Welcome to easyEWAS!
 
 [![R](https://img.shields.io/badge/R-%3E%3D%204.2-blue)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#)
