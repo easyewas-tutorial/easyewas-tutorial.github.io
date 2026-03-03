@@ -2,34 +2,62 @@
 
 This tutorial shows a minimal end-to-end workflow for `easyEWAS`.
 
-## 1. Install
+
+## <i class="fa-solid fa-circle-exclamation" style="color:#d9534f;"></i> Download Annotation by Chip Type (Must Read)
+
+<div class="alert alert-warning" role="alert">
+<i class="fa-solid fa-triangle-exclamation"></i>
+<strong>Update (March 3, 2026):</strong> chip annotation is no longer bundled in the main package tarball.
+Please download annotation for your chip(s) before running <code>startEWAS()</code> or <code>dmrEWAS()</code>.
+</div>
+
+Supported `chipType` values:
+
+- `27K` — Infinium HumanMethylation27 BeadChip
+- `450K` — Infinium HumanMethylation450 BeadChip
+- `EPICV1` — Infinium MethylationEPIC BeadChip (v1.0)
+- `EPICV2` — Infinium MethylationEPIC BeadChip (v2.0)
+- `MSA` — Infinium Methylation Screening Array
+
+Function signature:
 
 ``` r
-
-install.packages(c("remotes", "BiocManager"))
-remotes::install_github("ytwangZero/easyEWAS")
+downloadAnnotEWAS(
+  chipType = c("EPICV2", "EPICV1", "450K", "27K", "MSA"),
+  cache_dir = NULL,
+  force = FALSE,
+  base_url = getOption(
+    "easyEWAS.annotation_base_url",
+    "https://github.com/ytwangZero/easyEWAS_materials/raw/main/annotation"
+  ),
+  quiet = FALSE
+)
 ```
 
-## 2. Load package
+Common usage examples:
 
 ``` r
+# 1) Download one chip annotation (most common)
+downloadAnnotEWAS(chipType = "EPICV2")
 
-library(easyEWAS)
+# 2) Download multiple chips at once
+downloadAnnotEWAS(chipType = c("EPICV2", "450K"))
+
+# 3) Force refresh existing cache files
+downloadAnnotEWAS(chipType = "EPICV2", force = TRUE)
+
+# 4) Use a custom cache folder
+downloadAnnotEWAS(chipType = "EPICV2", cache_dir = "/path/to/annotation_cache")
 ```
 
-## 3. Download chip annotation once
-
-[`startEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/startEWAS.md)
-needs chip annotation data. Download and cache it before analysis.
-
-``` r
-
-downloadAnnotEWAS(chipType = "EPICV2") # also "EPICV1" or others.
-```
+<div class="alert alert-info" role="alert">
+<i class="fa-solid fa-lightbulb"></i>
+<strong>Tip:</strong> keep <code>chipType</code> consistent across <code>downloadAnnotEWAS()</code>, <code>startEWAS()</code>, and <code>dmrEWAS()</code>.
+</div>
 
 
 
-## 4. Run a minimal EWAS workflow
+## 1. Run a minimal EWAS workflow
 
 ``` r
 
@@ -59,7 +87,7 @@ res <- startEWAS(
 )
 ```
 
-## 5. Make plots
+## 2. Optional downstream analyses
 
 ``` r
 
@@ -70,8 +98,6 @@ res <- plotEWAS(
   file = "jpg"
 )
 ```
-
-## 6. Optional downstream analyses
 
 ``` r
 
@@ -106,7 +132,7 @@ res <- dmrEWAS(
 )
 ```
 
-## 7. Output files
+## 3. Output files
 
 All outputs are written to the folder created by
 [`initEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/initEWAS.md),
