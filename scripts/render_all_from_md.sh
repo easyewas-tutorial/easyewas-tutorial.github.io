@@ -25,7 +25,14 @@ if [[ $# -gt 0 ]]; then
     echo "$rel" >> "$md_list_file"
   done
 else
-  (cd "$ROOT_DIR" && rg --files -g "*.md" | LC_ALL=C sort) > "$md_list_file"
+  if command -v rg >/dev/null 2>&1; then
+    (cd "$ROOT_DIR" && rg --files -g "*.md" | LC_ALL=C sort) > "$md_list_file"
+  else
+    (
+      cd "$ROOT_DIR" && \
+      find . -type f -name "*.md" | sed 's#^\./##' | LC_ALL=C sort
+    ) > "$md_list_file"
+  fi
 fi
 
 while IFS= read -r md_rel; do

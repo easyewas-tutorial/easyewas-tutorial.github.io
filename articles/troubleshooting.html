@@ -63,34 +63,13 @@
       <div class="d-none name"><code>troubleshooting.Rmd</code></div>
     <p>This guide provides a practical error index for
 <code>easyEWAS</code>.</p>
-<h2 id="1-quick-diagnostics">1. Quick diagnostics</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;easyEWAS&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(res<span class="sc">$</span>Data<span class="sc">$</span>Expo)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(res<span class="sc">$</span>Data<span class="sc">$</span>Methy)</span></code></pre></div>
-<h2 id="2-installation-and-dependency-issues">2. Installation and
+<h2 id="1-installation-and-dependency-issues">1. Installation and
 dependency issues</h2>
-<h3 id="21-missing-package-errors">2.1 Missing package errors</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>))</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;sva&quot;</span>, <span class="st">&quot;clusterProfiler&quot;</span>, <span class="st">&quot;org.Hs.eg.db&quot;</span>, <span class="st">&quot;DMRcate&quot;</span>))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
-<h3 id="22-dmrewas-asks-for-dmrcate">2.2 <code>dmrEWAS()</code> asks for
-<code>DMRcate</code></h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;DMRcate&quot;</span>)</span></code></pre></div>
-<h2 id="3-annotation-download-and-caching-issues">3. Annotation download
-and caching issues</h2>
-<h3 id="31-annotation-missing-in-cache">3.1 Annotation missing in
-cache</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">downloadAnnotEWAS</span>(<span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>)</span></code></pre></div>
-<h3 id="32-custom-annotation-source">3.2 Custom annotation source</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">easyEWAS.annotation_base_url =</span> <span class="st">&quot;https://your-server/path/to/annotation&quot;</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">downloadAnnotEWAS</span>(<span class="at">chipType =</span> <span class="st">&quot;EPICV2&quot;</span>)</span></code></pre></div>
-<h2 id="4-data-format-and-alignment-issues">4. Data format and alignment
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;sva&quot;</span>, <span class="st">&quot;clusterProfiler&quot;</span>, <span class="st">&quot;org.Hs.eg.db&quot;</span>, <span class="st">&quot;DMRcate&quot;</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
+<h2 id="2-data-format-and-alignment-issues">2. Data format and alignment
 issues</h2>
 <p>Rules:</p>
 <ul>
@@ -99,52 +78,16 @@ issues</h2>
 <li><code>MethyData</code> sample columns must match
 <code>ExpoData</code> sample IDs</li>
 </ul>
-<h2 id="5-model-setup-issues">5. Model setup issues</h2>
-<h3 id="51-invalid-model-type">5.1 Invalid model type</h3>
-<p>Use only:</p>
-<ul>
-<li><code>"lm"</code></li>
-<li><code>"lmer"</code></li>
-<li><code>"cox"</code></li>
-</ul>
-<h3 id="52-cox-status-is-factor">5.2 Cox status is factor</h3>
-<p>Convert to numeric:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>Data<span class="sc">$</span>Expo<span class="sc">$</span>status <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(res<span class="sc">$</span>Data<span class="sc">$</span>Expo<span class="sc">$</span>status))</span></code></pre></div>
-<h3 id="53-exposure-should-be-factor">5.3 Exposure should be factor</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">transEWAS</span>(res, <span class="at">Vars =</span> <span class="st">&quot;var&quot;</span>, <span class="at">TypeTo =</span> <span class="st">&quot;factor&quot;</span>)</span></code></pre></div>
-<h2 id="6-batch-correction-issues">6. Batch correction issues</h2>
-<h3 id="61-batch-variable-not-found">6.1 Batch variable not found</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(res<span class="sc">$</span>Data<span class="sc">$</span>Expo)</span></code></pre></div>
-<h3 id="62-combat-fails-with-prior-plot">6.2 ComBat fails with prior
-plot</h3>
+<h2 id="3-combat-fails-with-prior-plot">3. ComBat fails with prior
+plot</h2>
 <p>Try:</p>
 <ul>
 <li><code>plot = FALSE</code></li>
 <li>check NA patterns</li>
 <li>verify each batch has enough samples</li>
 </ul>
-<h2 id="7-plotting-issues">7. Plotting issues</h2>
-<h3 id="71-no-ewas-result-found">7.1 No EWAS result found</h3>
-<p>Run <a
-href="https://ytwangZero.github.io/easyEWAS/reference/startEWAS.html"><code>startEWAS()</code></a>
-before <a
-href="https://ytwangZero.github.io/easyEWAS/reference/plotEWAS.html"><code>plotEWAS()</code></a>.</p>
-<h3 id="72-p-value-column-not-found">7.2 P-value column not found</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(res<span class="sc">$</span>result)</span></code></pre></div>
-<h2 id="8-bootstrapenrichment-issues">8. Bootstrap/enrichment
-issues</h2>
-<h3 id="81-no-significant-cpgs">8.1 No significant CpGs</h3>
-<p>Relax cutoff:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">bootEWAS</span>(res, <span class="at">filterP =</span> <span class="st">&quot;PVAL&quot;</span>, <span class="at">cutoff =</span> <span class="fl">0.01</span>, <span class="at">times =</span> <span class="dv">100</span>)</span></code></pre></div>
-<h3 id="82-empty-enrichment-output">8.2 Empty enrichment output</h3>
-<p>Check significance threshold and gene mapping quality.</p>
-<h2 id="9-dmr-issues">9. DMR issues</h2>
-<p>Recommended genome/chip combinations:</p>
+<h2 id="4-dmr-issues">4. DMR issues</h2>
+<p>Required genome/chip combinations:</p>
 <ul>
 <li><code>EPICV2</code> + <code>hg38</code></li>
 <li><code>EPICV1</code> / <code>450K</code> + <code>hg19</code></li>
