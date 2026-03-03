@@ -55,6 +55,8 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="easyewas">easyEWAS<a class="anchor" aria-label="anchor" href="#easyewas"></a>
 </h1></div>
+<p><small><i class="fa-regular fa-calendar"></i> Last updated: 2026-03-03 &nbsp;|&nbsp; <i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding)</small></p>
+
 <p>easyEWAS is an R package for conducting Epigenome-Wide Association
 Study (EWAS) in a unified and reproducible way. It supports Illumina
 methylation array platforms including 27K,450K, EPIC v1, EPIC v2, and
@@ -152,17 +154,82 @@ existing cache.</td>
 </div>
 
 <h2 id="installation">Installation</h2>
+<p>Before installing <code>easyEWAS</code>, we recommend pre-installing
+optional dependencies used by advanced modules.</p>
+<h3 id="core-dependencies-by-function">Core dependencies by
+function</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Required packages</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>batchEWAS()</code></td>
+<td style="text-align: left;"><code>sva</code></td>
+<td style="text-align: left;">Required for ComBat batch correction</td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><code>batchEWAS(..., parallel = TRUE)</code></td>
+<td style="text-align: left;"><code>sva</code>,
+<code>BiocParallel</code></td>
+<td style="text-align: left;"><code>BiocParallel</code> is needed only
+for parallel mode</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>enrichEWAS()</code></td>
+<td style="text-align: left;"><code>clusterProfiler</code>,
+<code>org.Hs.eg.db</code></td>
+<td style="text-align: left;">Required for ID conversion and GO/KEGG
+enrichment</td>
+</tr>
+<tr>
+<td
+style="text-align: left;"><code>enrichEWAS(plot = TRUE, plotType = "dot")</code></td>
+<td style="text-align: left;"><code>enrichplot</code></td>
+<td style="text-align: left;">Required for dotplot visualization</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>dmrEWAS()</code></td>
+<td style="text-align: left;"><code>DMRcate</code></td>
+<td style="text-align: left;">Required for DMR analysis</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recommended-pre-install">Recommended pre-install</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;sva&quot;</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;BiocParallel&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;clusterProfiler&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;org.Hs.eg.db&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;enrichplot&quot;</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;DMRcate&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ask =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">update =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Install from GitHub:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
 <p>Load package:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(easyEWAS)</span></code></pre></div>
-<h3 id="optional-dependency-for-dmr-analysis">Optional dependency for
-DMR analysis</h3>
-<p><a
-href="https://ytwangZero.github.io/easyEWAS/reference/dmrEWAS.html"><code>dmrEWAS()</code></a>
-depends on <code>DMRcate</code>, which is in <code>Suggests</code> and
-is not installed automatically in minimal setups.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;DMRcate&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(easyEWAS)</span></code></pre></div>
+<p>If you prefer installing only when needed:</p>
+<ul>
+<li><code>batchEWAS()</code>:
+<code>BiocManager::install(c("sva", "BiocParallel"))</code></li>
+<li><code>enrichEWAS()</code>:
+<code>BiocManager::install(c("clusterProfiler", "org.Hs.eg.db", "enrichplot"))</code></li>
+<li><code>dmrEWAS()</code>:
+<code>BiocManager::install("DMRcate")</code></li>
+</ul>
 <h2 id="-citation"><i class="fa-solid fa-quote-left"></i> Citation</h2>
 <p>Wang Y, Jiang M, Niu S, Gao X. easyEWAS: a flexible and user-friendly
 R package for epigenome-wide association study[J]. Bioinformatics

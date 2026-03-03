@@ -1,5 +1,7 @@
 # easyEWAS
 
+<p><small><i class="fa-regular fa-calendar"></i> Last updated: 2026-03-03 &nbsp;|&nbsp; <i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding)</small></p>
+
 easyEWAS is an R package for conducting Epigenome-Wide Association Study (EWAS) 
 in a unified and reproducible way. It supports Illumina methylation array platforms 
 including 27K,450K, EPIC v1, EPIC v2, and MSA, and provides an end-to-end workflow
@@ -71,6 +73,40 @@ downloadAnnotEWAS(chipType = "EPICV2", cache_dir = "/path/to/annotation_cache")
 
 ## Installation
 
+Before installing `easyEWAS`, we recommend pre-installing optional
+dependencies used by advanced modules.
+
+### Core dependencies by function
+
+| Function | Required packages | Notes |
+|:--|:--|:--|
+| `batchEWAS()` | `sva` | Required for ComBat batch correction |
+| `batchEWAS(..., parallel = TRUE)` | `sva`, `BiocParallel` | `BiocParallel` is needed only for parallel mode |
+| `enrichEWAS()` | `clusterProfiler`, `org.Hs.eg.db` | Required for ID conversion and GO/KEGG enrichment |
+| `enrichEWAS(plot = TRUE, plotType = "dot")` | `enrichplot` | Required for dotplot visualization |
+| `dmrEWAS()` | `DMRcate` | Required for DMR analysis |
+
+### Recommended pre-install
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+
+BiocManager::install(
+  c(
+    "sva",
+    "BiocParallel",
+    "clusterProfiler",
+    "org.Hs.eg.db",
+    "enrichplot",
+    "DMRcate"
+  ),
+  ask = FALSE,
+  update = TRUE
+)
+```
+
 Install from GitHub:
 
 ``` r
@@ -83,15 +119,12 @@ Load package:
 library(easyEWAS)
 ```
 
-### Optional dependency for DMR analysis
+If you prefer installing only when needed:
 
-[`dmrEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/dmrEWAS.html)
-depends on `DMRcate`, which is in `Suggests` and is not installed
-automatically in minimal setups.
+- `batchEWAS()`: `BiocManager::install(c("sva", "BiocParallel"))`
+- `enrichEWAS()`: `BiocManager::install(c("clusterProfiler", "org.Hs.eg.db", "enrichplot"))`
+- `dmrEWAS()`: `BiocManager::install("DMRcate")`
 
-``` r
-BiocManager::install("DMRcate")
-```
 
 ## <i class="fa-solid fa-quote-left"></i> Citation
 
