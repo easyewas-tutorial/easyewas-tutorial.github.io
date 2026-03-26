@@ -22,15 +22,38 @@ easyEWAS is a user-friendly R package designed for conducting epigenome-wide ass
 
 ## Installation
 
-Users can install the easyEWAS package by running:
+`easyEWAS` supports two installation methods. We recommend installing
+the stable CRAN release for routine use, and the GitHub version if you
+need the latest development updates.
 
-```{r installation, eval=FALSE}
-devtools::install_github("ytwangZero/easyEWAS")
+### Install from CRAN (recommended)
+
+```{r installation-cran, eval=FALSE}
+install.packages("easyEWAS")
+```
+
+### Install from GitHub (development version)
+
+```{r installation-github, eval=FALSE}
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+remotes::install_github("ytwangZero/easyEWAS")
 ```
 
 ## Prepare Data Files
 
-easyEWAS supports `.csv` and `.xlsx` file formats. Ensure your data is in one of these formats.
+easyEWAS supports two input modes for loading sample and methylation
+data into `loadEWAS()`:
+
+- Read external files with `ExpoPath` and `MethyPath`. Both `.csv` and
+  `.xlsx` formats are supported.
+- Pass data objects that are already available in the R environment with
+  `ExpoData` and `MethyData`.
+
+The package also includes built-in example datasets that can be loaded
+directly in R for testing and demonstration.
 
 ### Sample data
 
@@ -64,16 +87,31 @@ library(easyEWAS)
 
 ### Step 1: Initialize the EWAS module
 
-After loading easyEWAS, users can initialize the analysis module with [`initEWAS()`](../reference/initEWAS.html). This creates a folder named `EWASresult` under the working path. If `outpath = "default"`, results are stored in the current working directory.
+After loading easyEWAS, users can initialize the analysis module with
+[`initEWAS()`](../reference/initEWAS.html). By default,
+`initEWAS(export = FALSE)` keeps all results in memory and does not
+write files to disk. If you want exported result files, set
+`export = TRUE` and provide an existing directory in `outpath`; an
+`EWASresult` folder will then be created under that directory.
+
+In this tutorial, we enable file export so the generated CSV and plot
+files are easy to inspect.
 
 ```{r step-1-init}
-res <- initEWAS(outpath = "default")
+res <- initEWAS(outpath = getwd(), export = TRUE)
 ```
 
-When specifying a custom storage path, make sure the path exists.
+If you prefer an in-memory workflow only:
+
+```{r step-1-init-memory, eval=FALSE}
+res <- initEWAS(export = FALSE)
+```
+
+When specifying a custom storage path, make sure the path already
+exists.
 
 ```{r step-1-init-custom, eval=FALSE}
-res <- initEWAS(outpath = "D:/test")
+res <- initEWAS(outpath = "D:/test", export = TRUE)
 ```
 
 Note: The function returns an R6 object integrating all information, so assign it to an object such as `res`.

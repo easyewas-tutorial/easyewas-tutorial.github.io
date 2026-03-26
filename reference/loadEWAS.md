@@ -1,6 +1,9 @@
 # Load all data files for EWAS module
 
-Upload sample data and methylation data for EWAS analysis.
+Upload sample data and methylation data for EWAS analysis. Users can
+either read external `.csv`/`.xlsx` files with `ExpoPath` and
+`MethyPath`, or pass data objects already loaded in the R environment
+with `ExpoData` and `MethyData`.
 
 ## Usage
 
@@ -52,7 +55,7 @@ input, an R6 class object integrating all information.
 
 ``` r
 if (FALSE) { # \dontrun{
-res <- initEWAS(outpath = "default")
+res <- initEWAS(export = FALSE)
 res <- loadEWAS(input = res, ExpoData = "default", MethyData = "default")
 } # }
 ```

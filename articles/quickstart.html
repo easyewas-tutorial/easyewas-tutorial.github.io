@@ -10,7 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css?v=20260303" rel="stylesheet">
 <meta property="og:title" content="easyEWAS Quickstart">
 </head>
 <body>
@@ -49,13 +49,7 @@
 
 
 <div class="row">
-  <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>easyEWAS Quickstart</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/vignettes/quickstart.Rmd" class="external-link"><code>vignettes/quickstart.Rmd</code></a></small>
-      <div class="d-none name"><code>quickstart.Rmd</code></div>
+  <main id="main" class="col-md-9"><div class="page-header"><h1 id="easyewas-quickstart">easyEWAS Quickstart</h1></div>
     <p>This tutorial shows a minimal end-to-end workflow for
 <code>easyEWAS</code>.</p>
 <h2
@@ -105,8 +99,11 @@ Please download annotation for your chip(s) before running <code>startEWAS()</co
 
 <h2 id="1-run-a-minimal-ewas-workflow">1. Run a minimal EWAS
 workflow</h2>
+<p>By default, <code>initEWAS()</code> keeps results in memory only. In
+this quickstart, we enable file export so output files will be written
+under the current working directory.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="st">&quot;default&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">initEWAS</span>(<span class="at">outpath =</span> <span class="fu">getwd</span>(), <span class="at">export =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;sampledata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;easyEWAS&quot;</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;methydata&quot;</span>, <span class="at">package =</span> <span class="st">&quot;easyEWAS&quot;</span>)</span>
@@ -166,9 +163,11 @@ analyses</h2>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">genome =</span> <span class="st">&quot;hg38&quot;</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <h2 id="3-output-files">3. Output files</h2>
-<p>All outputs are written to the folder created by <a
-href="https://ytwangZero.github.io/easyEWAS/reference/initEWAS.html"><code>initEWAS()</code></a>,
-by default:</p>
+<p>When <code>export = TRUE</code>, outputs are written to the
+<code>EWASresult</code> folder created by <a
+href="https://ytwangZero.github.io/easyEWAS/reference/initEWAS.html"><code>initEWAS()</code></a>.
+If <code>export = FALSE</code>, results stay in the returned object
+instead of being saved to disk.</p>
 <ul>
 <li><code>EWASresult/ewasresult.csv</code></li>
 <li>Plot files from <a

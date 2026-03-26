@@ -5,10 +5,16 @@ This guide provides a practical error index for `easyEWAS`.
 
 ## 1. Installation and dependency issues
 
+Install `easyEWAS` from CRAN first. If you need the development version,
+you can install it from GitHub instead.
+
 ``` r
+install.packages("easyEWAS")
 
 install.packages(c("remotes", "BiocManager"))
 BiocManager::install(c("sva", "clusterProfiler", "org.Hs.eg.db", "DMRcate"))
+
+# Optional: install the latest development version from GitHub
 remotes::install_github("ytwangZero/easyEWAS")
 ```
 

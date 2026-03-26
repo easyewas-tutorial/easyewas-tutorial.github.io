@@ -10,7 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css?v=20260303" rel="stylesheet">
 <meta property="og:title" content="easyEWAS Demo Data Full Tutorial">
 </head>
 <body>
@@ -68,11 +68,32 @@ internal validation is incorporated to evaluate the robustness of EWAS
 results. easyEWAS is compatible with currently most cited Illumina
 high-density microarray platforms for genome-wide methylation profiling,
 including 27K, 450K, EPIC V1, EPIC V2, and MSA arrays.</p>
+<h2 id="installation">Installation</h2>
+<p><code>easyEWAS</code> supports two installation methods. We recommend
+installing the stable CRAN release for routine use, and the GitHub
+version if you need the latest development updates.</p>
+<h3 id="install-from-cran-recommended">Install from CRAN
+(recommended)</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;easyEWAS&quot;</span>)</span></code></pre></div>
+<h3 id="install-from-github-development-version">Install from GitHub
+(development version)</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;remotes&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
 <h2 id="prepare-data-files">Prepare Data Files</h2>
-<p>easyEWAS supports <code>.csv</code> and <code>.xlsx</code> file
-formats. so ensure your data is in one of these formats. The package
-also includes internal sample and methylation datasets for users to
-explore and test its functions.</p>
+<p>easyEWAS supports two input modes for loading sample and methylation
+data into <code>loadEWAS()</code>:</p>
+<ul>
+<li>Read external files with <code>ExpoPath</code> and
+<code>MethyPath</code>. Both <code>.csv</code> and <code>.xlsx</code>
+formats are supported.</li>
+<li>Pass data objects that are already available in the R environment
+with <code>ExpoData</code> and <code>MethyData</code>.</li>
+</ul>
+<p>The package also includes built-in example datasets that can be
+loaded directly in R for testing and demonstration.</p>
 <h3 id="sample-data">Sample data</h3>
 <p>Users need to prepare a sample file to store sample information, such
 as sample ID, exposure variables, and covariates.</p>
@@ -107,28 +128,28 @@ head(methydata[, 1:6])
 <h2 id="analysis-pipeline">Analysis pipeline</h2>
 <h3 id="library-the-package">Library the package</h3>
 <pre><code>library(easyEWAS)
-#&gt; 
-#&gt; Welcome to easyEWAS 1.1.0!
-#&gt; =============================
-#&gt; Flexible and user-friendly tools for Epigenome-Wide Association Studies.
-#&gt; 
-#&gt; Authors: Yuting Wang &amp; Xu Gao (Corresponding author)
-#&gt; Documentation: https://easyewas-tutorial.github.io/
-#&gt; Citation:https://doi.org/10.1093/bioadv/vbaf026</code></pre>
+#&gt; easyEWAS 1.0.1 loaded. Tutorial: https://easyewas-tutorial.github.io/</code></pre>
 <h3 id="step-1-initialize-the-ewas-module">Step 1: Initialize the EWAS
 module</h3>
 <p>After loading easyEWAS, users can initialize the analysis module with
-<a href="../reference/initEWAS.html"><code>initEWAS()</code></a>. This
-creates a folder named <code>EWASresult</code> under the working path.
-If <code>outpath = "default"</code>, results are stored in the current
-working directory.</p>
-<pre><code>res &lt;- initEWAS(outpath = &quot;default&quot;)
+<a href="../reference/initEWAS.html"><code>initEWAS()</code></a>. By
+default, <code>initEWAS(export = FALSE)</code> keeps all results in
+memory and does not write files to disk. If you want exported result
+files, set <code>export = TRUE</code> and provide an existing directory
+in <code>outpath</code>; an <code>EWASresult</code> folder will then be
+created under that directory.</p>
+<p>In this tutorial, we enable file export so the generated CSV and plot
+files are easy to inspect.</p>
+<pre><code>res &lt;- initEWAS(outpath = getwd(), export = TRUE)
 #&gt; EWAS module has been successfully initialized.
 #&gt; Results will be saved to: /Users/yuting/Documents/EWASresult
 #&gt; Initialization time: 2026-03-03 12:12:56.282611
 #&gt; 0.002 sec elapsed</code></pre>
-<p>When specifying a custom storage path, make sure the path exists.</p>
-<pre><code>res &lt;- initEWAS(outpath = &quot;D:/test&quot;)</code></pre>
+<p>If you prefer an in-memory workflow only:</p>
+<pre><code>res &lt;- initEWAS(export = FALSE)</code></pre>
+<p>When specifying a custom storage path, make sure the path already
+exists.</p>
+<pre><code>res &lt;- initEWAS(outpath = &quot;D:/test&quot;, export = TRUE)</code></pre>
 <p>Note: The function returns an R6 object integrating all information,
 so assign it to an object such as <code>res</code>.</p>
 <h3 id="step-2-load-the-data-files">Step 2: Load the Data Files</h3>

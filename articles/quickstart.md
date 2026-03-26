@@ -59,9 +59,13 @@ downloadAnnotEWAS(chipType = "EPICV2", cache_dir = "/path/to/annotation_cache")
 
 ## 1. Run a minimal EWAS workflow
 
+By default, `initEWAS()` keeps results in memory only. In this
+quickstart, we enable file export so output files will be written under
+the current working directory.
+
 ``` r
 
-res <- initEWAS(outpath = "default")
+res <- initEWAS(outpath = getwd(), export = TRUE)
 
 data("sampledata", package = "easyEWAS")
 data("methydata", package = "easyEWAS")
@@ -134,9 +138,11 @@ res <- dmrEWAS(
 
 ## 3. Output files
 
-All outputs are written to the folder created by
-[`initEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/initEWAS.md),
-by default:
+When `export = TRUE`, outputs are written to the `EWASresult` folder
+created by
+[`initEWAS()`](https://ytwangZero.github.io/easyEWAS/reference/initEWAS.md).
+If `export = FALSE`, results stay in the returned object instead of
+being saved to disk.
 
 - `EWASresult/ewasresult.csv`
 - Plot files from

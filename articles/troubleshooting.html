@@ -10,7 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css?v=20260303" rel="stylesheet">
 <meta property="og:title" content="easyEWAS Troubleshooting Guide">
 </head>
 <body>
@@ -49,21 +49,21 @@
 
 
 <div class="row">
-  <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>easyEWAS Troubleshooting Guide</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/ytwangZero/easyEWAS/blob/HEAD/vignettes/troubleshooting.Rmd" class="external-link"><code>vignettes/troubleshooting.Rmd</code></a></small>
-      <div class="d-none name"><code>troubleshooting.Rmd</code></div>
+  <main id="main" class="col-md-9"><div class="page-header"><h1 id="easyewas-troubleshooting-guide">easyEWAS Troubleshooting
+Guide</h1></div>
     <p>This guide provides a practical error index for
 <code>easyEWAS</code>.</p>
 <h2 id="1-installation-and-dependency-issues">1. Installation and
 dependency issues</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;sva&quot;</span>, <span class="st">&quot;clusterProfiler&quot;</span>, <span class="st">&quot;org.Hs.eg.db&quot;</span>, <span class="st">&quot;DMRcate&quot;</span>))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
+<p>Install <code>easyEWAS</code> from CRAN first. If you need the
+development version, you can install it from GitHub instead.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;easyEWAS&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;sva&quot;</span>, <span class="st">&quot;clusterProfiler&quot;</span>, <span class="st">&quot;org.Hs.eg.db&quot;</span>, <span class="st">&quot;DMRcate&quot;</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: install the latest development version from GitHub</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ytwangZero/easyEWAS&quot;</span>)</span></code></pre></div>
 <h2 id="2-data-format-and-alignment-issues">2. Data format and alignment
 issues</h2>
 <p>Rules:</p>

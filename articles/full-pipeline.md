@@ -13,11 +13,40 @@ high-density microarray platforms for genome-wide methylation profiling,
 including 27K, 450K, EPIC V1, EPIC V2, and MSA arrays.
 
 
+## Installation
+
+`easyEWAS` supports two installation methods. We recommend installing
+the stable CRAN release for routine use, and the GitHub version if you
+need the latest development updates.
+
+### Install from CRAN (recommended)
+
+``` r
+install.packages("easyEWAS")
+```
+
+### Install from GitHub (development version)
+
+``` r
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+remotes::install_github("ytwangZero/easyEWAS")
+```
+
 ## Prepare Data Files
 
-easyEWAS supports `.csv` and `.xlsx` file formats. so ensure your data is in 
-one of these formats. The package also includes internal sample and methylation 
-datasets for users to explore and test its functions.
+easyEWAS supports two input modes for loading sample and methylation
+data into `loadEWAS()`:
+
+- Read external files with `ExpoPath` and `MethyPath`. Both `.csv` and
+  `.xlsx` formats are supported.
+- Pass data objects that are already available in the R environment with
+  `ExpoData` and `MethyData`.
+
+The package also includes built-in example datasets that can be loaded
+directly in R for testing and demonstration.
 
 ### Sample data
 
@@ -60,31 +89,34 @@ and each column represents a sample.
 ### Library the package
 
     library(easyEWAS)
-    #> 
-    #> Welcome to easyEWAS 1.1.0!
-    #> =============================
-    #> Flexible and user-friendly tools for Epigenome-Wide Association Studies.
-    #> 
-    #> Authors: Yuting Wang & Xu Gao (Corresponding author)
-    #> Documentation: https://easyewas-tutorial.github.io/
-    #> Citation:https://doi.org/10.1093/bioadv/vbaf026
+    #> easyEWAS 1.0.1 loaded. Tutorial: https://easyewas-tutorial.github.io/
 
 ### Step 1: Initialize the EWAS module
 
 After loading easyEWAS, users can initialize the analysis module with
-[`initEWAS()`](../reference/initEWAS.html). This creates a folder named
-`EWASresult` under the working path. If `outpath = "default"`, results
-are stored in the current working directory.
+[`initEWAS()`](../reference/initEWAS.html). By default,
+`initEWAS(export = FALSE)` keeps all results in memory and does not
+write files to disk. If you want exported result files, set
+`export = TRUE` and provide an existing directory in `outpath`; an
+`EWASresult` folder will then be created under that directory.
 
-    res <- initEWAS(outpath = "default")
+In this tutorial, we enable file export so the generated CSV and plot
+files are easy to inspect.
+
+    res <- initEWAS(outpath = getwd(), export = TRUE)
     #> EWAS module has been successfully initialized.
     #> Results will be saved to: /Users/yuting/Documents/EWASresult
     #> Initialization time: 2026-03-03 12:12:56.282611
     #> 0.002 sec elapsed
 
-When specifying a custom storage path, make sure the path exists.
+If you prefer an in-memory workflow only:
 
-    res <- initEWAS(outpath = "D:/test")
+    res <- initEWAS(export = FALSE)
+
+When specifying a custom storage path, make sure the path already
+exists.
+
+    res <- initEWAS(outpath = "D:/test", export = TRUE)
 
 Note: The function returns an R6 object integrating all information, so
 assign it to an object such as `res`.

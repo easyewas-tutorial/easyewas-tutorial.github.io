@@ -1,9 +1,10 @@
 # Welcome to easyEWAS!
 
-[![R](https://img.shields.io/badge/R-%3E%3D%204.2-blue)](#)
+[![R](https://img.shields.io/badge/R-%3E%3D%204.4-blue)](#)
+[![CRAN](https://www.r-pkg.org/badges/version/easyEWAS)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-ytwangZero%2FeasyEWAS-black?logo=github)](#)
-[![Last updated](https://img.shields.io/badge/Last%20updated-2026--03--03-informational)](#)
+[![Last updated](https://img.shields.io/badge/Last%20updated-2026--03--26-informational)](#)
 
 <p><small><i class="fa-regular fa-user"></i> Author: Yuting Wang, Xu Gao (Corresponding author)</small></p>
 
@@ -23,8 +24,15 @@
 
 # Installation
 
-Before installation, we still recommend pre-installing optional
+`easyEWAS` can now be installed from CRAN or GitHub. For most users, we
+recommend the CRAN release. We also recommend pre-installing optional
 dependencies used by advanced modules.
+
+## Install from CRAN (recommended)
+
+``` r
+install.packages("easyEWAS")
+```
 
 ## Core dependencies by function
 
@@ -57,9 +65,13 @@ BiocManager::install(
 )
 ```
 
-## Install from GitHub
+## Install from GitHub (development version)
 
 ``` r
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
 remotes::install_github("ytwangZero/easyEWAS")
 ```
 
